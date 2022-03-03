@@ -11,9 +11,14 @@ const router = createRouter({
             component: () => import('../components/pages/404Page')
         },
         {
+            path: '/start',
+            name: 'start',
+            component: () => import('../components/pages/start')
+        },
+        {
             path: '/',
             name: '',
-            component: () => import('../components/pages/index')
+            component: () => import('../components/pages/start')
         },
         {
             path: '/index',

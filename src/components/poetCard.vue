@@ -1,16 +1,16 @@
 <template>
   <div class="drop-shadow">
-<!--姓名-->
+    <!--姓名-->
     <h1>李白</h1>
     <el-divider style="background-color:black;opacity: 0.3;"></el-divider>
-<!-- 生平经历-->
+    <!-- 生平经历-->
     <p class="life-experience">
       李白（701年5月19日－762年11月30日）[注 1]，字太白，号青莲居士，中国唐朝诗人。李白自言祖籍陇西成纪（今甘肃静宁西南），汉飞将军李广后裔，西凉武昭王李暠之后，与李唐皇室同宗。
       一说其幼时内迁，寄籍剑南道绵州昌隆（今四川省江油市青莲镇）。
       一说先人隋末被窜于碎叶，出生于碎叶，属唐安西都护府（今吉尔吉斯斯坦共和国楚河州托克马克市）。
       有“诗仙”、“诗侠”、“酒仙”、“谪仙人”等称呼，活跃于盛唐[1]，为杰出的浪漫主义诗人。与杜甫合称“李杜”[注 2]。被贺知章呼为“天上谪仙”、“李谪仙”。
     </p>
-<!-- 成就-->
+    <!-- 成就-->
     <p class="life-Achievement">
       李白的诗歌在唐朝已被选进殷璠编选的《河岳英灵集》、于敦煌石室发现的《唐写本唐人选唐诗》、韦庄编选的《又玄集》和韦縠编选的《才调集》。
       唐文宗御封李白的诗歌、裴旻的剑舞、张旭的草书称为“三绝”[2]。其作品想像奇特丰富，风格雄奇浪漫，意境独特，清新俊逸；
@@ -67,31 +67,32 @@
 <script>
 export default {
   name: "poetCard",
-  props:{
-    poet:String,
-    Introduction:String
+  props: {
+    poet: String,
+    Introduction: String
   }
 }
 </script>
 
 <style scoped>
-.drop-shadow h1, .drop-shadow p{
+.drop-shadow h1, .drop-shadow p {
   text-align: left;
 }
-.drop-shadow p{
+
+.drop-shadow p {
   margin-left: 4em;
   font-weight: bold;
-  text-indent:2em;
+  text-indent: 2em;
 }
 
 .drop-shadow {
-
+  font-family: "Microsoft YaHei",serif;
   border: #a56c6c 3px solid;
   border-radius: 20px;
   position: relative;
-  width: 35%;
+  width: 50%;
   padding: 2em;
-  margin: 130px auto 5em;
+  margin: 60px auto 5em;
   background-color: rgb(240, 239, 226);
 }
 
@@ -109,6 +110,11 @@ export default {
 .drop-shadow:after {
   right: 10px;
   left: auto;
+}
+
+.drop-shadow p {
+
+  letter-spacing: 2px;
 }
 
 </style>

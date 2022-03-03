@@ -2,9 +2,9 @@
   <div class="bar-root">
     <div class="bar-box">
       <ul class="bar-ul">
-       <li class="bar-li" @click="goAnchor('swiper')">顶部</li>
-       <li class="bar-li" @click="goAnchor('')">XX</li>
-       <li class="bar-li" @click="goAnchor('')">XX</li>
+        <li class="bar-li" @click="goAnchor('swiper')">顶部</li>
+        <li class="bar-li" @click="goAnchor('')">每日推荐</li>
+        <li class="bar-li" @click="goAnchor('')">每日一遍</li>
         <li class="bar-li" @click="goAnchor('about-us')">关于我们</li>
       </ul>
     </div>
@@ -28,16 +28,19 @@ export default {
 <style scoped>
 .bar-box {
   font-weight: bold;
-  position: fixed;
-  left: 10px;
-  top: 300px;
+  float: right;
+  margin-right: 100px;
+  margin-top: 30px;
   display: inline-block;
-  width: 0;
+  /*width: 80px;*/
   height: 80px;
   padding-left: 80px;
-  border-radius: 40px;
-  background-color: #801c1c;
-  /*opacity: 0.4;*/
+  border-radius: 8px;
+  /*background-color: #801c1c;*/
+  background-image: url(../assets/images/诗间方寸.png);
+  background-size: 100%;
+  background-position: center center;
+  object-fit: cover;
   line-height: 80px;
   color: #fff;
   text-align: left;
@@ -48,9 +51,11 @@ export default {
   border-radius: 0;
   height: 166px;
   width: 80px;
+  background-image: none;
 }
 
 .bar-box:hover .bar-ul {
+  background-color: #801c1c;
   display: block;
 }
 
@@ -69,12 +74,17 @@ export default {
   display: block;
   text-align: center;
   border-bottom: 2px solid rgb(72, 71, 69);
+  background-color: #801c1c;
 }
 
 .bar-li:hover {
-  background-color: #801c1c;
-  opacity: 0.8;
+  /*opacity: 0.8;*/
   cursor: pointer;
-  /*color: white;*/
+  color: white;
 }
+
+.bar-root {
+  z-index: 10;
+}
+
 </style>

@@ -38,10 +38,10 @@ export default {
 
 <style scoped>
 .footerBox {
+  position: relative;
   height: 300px;
   background-color: #586079;
-  /*opacity: 0.3;*/
-  font-weight: bold;
+  font-family: "Microsoft YaHei", serif;
 }
 
 .footer {
@@ -64,8 +64,6 @@ h2 {
   font-size: 18px;
   font-family: "Century Schoolbook", serif;
   color: wheat;
-  /*background-color: #eeee;*/
-  /*opacity: 0.8;*/
   padding: 20px;
   position: absolute;
   top: 30px;

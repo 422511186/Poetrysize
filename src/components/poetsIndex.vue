@@ -19,7 +19,7 @@ export default {
 .Poets-Index {
   min-height: 300px;
   /*float: left;*/
-  margin: 100px auto;
+  margin: 60px auto;
   border-radius: 10px;
   position: relative;
   width: 40%;

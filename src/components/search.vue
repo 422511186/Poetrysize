@@ -1,8 +1,8 @@
 <template>
-  <div class="search bar7">
+  <div class="search bar8">
     <div>
       <input type="text" placeholder="请输入">
-      <button></button>
+      <button type="submit"></button>
     </div>
   </div>
 </template>
@@ -13,17 +13,13 @@ name: "searchInput"
 </script>
 
 <style scoped>
+* {
+  box-sizing:border-box;
+}
+
 
 div.search {
-  position: absolute;
-  top: 20px;
-  right: 80px;
   padding:10px 0;
-}
-div {
-  position:relative;
-  width:300px;
-  margin:0 auto;
 }
 
 input,button {
@@ -32,41 +28,55 @@ input,button {
 }
 input {
   width:100%;
-  height:42px;
+  height:60px;
   padding-left:13px;
 }
 button {
-  height:42px;
-  width:42px;
+  height:60px;
+  width:60px;
   cursor:pointer;
   position:absolute;
 }
 
-/*搜索框7*/
-.bar7 div {
-  height:42px;
-}
-.bar7 input {
-  width:180px;
-  border-radius:42px;
-  border:2px solid #324B4E;
-  background:#F9F0DA;
-  transition:.3s linear;
-  float:right;
-}
-
-.bar7 input:focus {
-  width:240px;
-}
-.bar7 button {
-  background:none;
-  top:-2px;
-  right:20px;
-}
-.bar7 button:before {
-  content:"Search";
-  font-family:FontAwesome,serif;
-  color:#324b4e;
+.bar8{
+  position: absolute;
+  top: 130px;
+  right: 70px;
 }
 /*搜索框8*/
+.bar8 div {
+  height:60px;
+}
+.bar8 input {
+  width:0;
+  padding:0 60px 0 15px;
+  border-bottom:2px solid transparent;
+  background:transparent;
+  transition:.3s linear;
+  position:absolute;
+  top:0;
+  right:0;
+  z-index:2;
+  /*background-color: rgb(240, 239, 226);*/
+}
+.bar8 input:focus {
+  width:300px;
+  z-index:1;
+  border-bottom:2px solid #ffffff;
+}
+
+.bar8 button {
+  background:#683B4D;
+  top:0;
+  right:0;
+}
+
+
+.bar8 button:before {
+  content:"搜索";
+  font-family:FontAwesome,serif;
+  font-weight: bold;
+  font-size:16px;
+  color:#F9F0DA;
+}
 </style>

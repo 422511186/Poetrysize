@@ -26,6 +26,7 @@ export default {
 <style scoped>
 
 .drop-shadow {
+  font-family: "Microsoft YaHei",serif;
   margin: 120px auto;
   /*border: #a56c6c 3px solid;*/
   border-radius: 10px;

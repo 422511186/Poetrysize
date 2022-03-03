@@ -1,9 +1,11 @@
 <template>
   <pageHeader/>
 <!--  <navigationBar/>-->
-  <router-view >
-  </router-view>
+<!--  <transition name="component-fade" mode="out-in">-->
+    <router-view ></router-view>
+<!--  </transition>-->
   <footer-box class="footer1"/>
+  <search-input/>
 </template>
 <!--诗人页面-->
 <script>
@@ -13,10 +15,12 @@ import poetryCard from "@/components/poetry";
 import swiper from "@/components/swiper";
 import pageHeader from "@/components/pageHeader";
 import navigationBar from "@/components/navigationBar";
+import SearchInput from "@/components/search";
 
 export default {
   name: "poetPage",
   components: {
+    SearchInput,
     // eslint-disable-next-line vue/no-unused-components
     LanternCard,
     FooterBox,

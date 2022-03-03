@@ -1,8 +1,9 @@
 <template>
   <div class="swiper" id="swiper">
+    <div class="swiper-mask"></div>
     <el-carousel height=600px indicator-position="none" interval=2000 width=50%  arrow="hover">
-      <el-carousel-item v-for="item in imgs" :key="item">
-        <el-image  class="swiper_img" :src="item"> </el-image>
+      <el-carousel-item v-for="item in 10" :key="item">
+        <el-image  class="swiper_img" :src="url +item +'.jpg' "> </el-image>
 <!--        <img class="swiper_img" :src="item" alt="#">-->
       </el-carousel-item>
     </el-carousel>
@@ -18,11 +19,12 @@ export default {
   },
   data() {
     return {
-      Primary: 'qqq',
+      /**
+       * oss服务器ip地址
+       */
+      url:'http://localhost:5000/',
+
       imgs: [
-        // 'http://106.55.53.162/static/l2.png',
-        // 'http://106.55.53.162/static/l3.png',
-        // 'http://106.55.53.162/static/l4.png',
         'http://localhost:5000/0.jpg',
         'http://localhost:5000/1.jpg',
         'http://localhost:5000/22.jpg',
@@ -44,17 +46,29 @@ export default {
 <style scoped>
 
 .swiper {
-  margin: 120px auto;
-  height: 600px;
-  width: 1535px;
-  border-radius: 30px;
+  /*margin: 0 auto;*/
+  position: relative;
+  width: 100%;
+  height: 40%;
+
+  /*min-height: 500px;*/
+  object-fit: cover;
 }
 
 .swiper_img {
   object-fit: cover;
-  height: 100%;
   width: 100%;
-  border-radius: 30px;
+  height: 100%;
+  min-height: 100%;
 }
 
+.swiper-mask {
+  position: absolute;
+  bottom: 0;
+  background-image: linear-gradient(to bottom, transparent, rgb(246, 239, 231));
+  background-size: 100%;
+  width: 100%;
+  height: 150px;
+  z-index: 10;
+}
 </style>

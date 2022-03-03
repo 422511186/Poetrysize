@@ -1,11 +1,11 @@
 <template>
-  <pageHeader/>
-<!--    <router-view>-->
-<!--    </router-view>-->
-  <swiper/>
-  <navigationBar/>
-<!--  <poetryCard v-for="(value,index) in 10" :key="index" :class="index%2===1?'right':'left'" :main_body="poety" class="item"></poetryCard>-->
-  <footer-box class="footer1"/>
+  <div class="indexPage">
+    <!--    <div class="swiperMask"></div>-->
+    <swiper/>
+    <pageHeader class="top-header"/>
+    <navigationBar/>
+    <footer-box class="footer1"/>
+  </div>
 </template>
 <script>
 
@@ -23,10 +23,13 @@ export default {
   components: {
     // eslint-disable-next-line vue/no-unused-components
     LanternCard,
+    // eslint-disable-next-line vue/no-unused-components
     FooterBox,
     // eslint-disable-next-line vue/no-unused-components
     poetryCard,
+    // eslint-disable-next-line vue/no-unused-components
     swiper,
+    // eslint-disable-next-line vue/no-unused-components
     pageHeader,
     // eslint-disable-next-line vue/no-unused-components
     navigationBar
@@ -72,6 +75,25 @@ export default {
 
 
 .footer1 {
-  margin-top: 100px;
+  margin-top: 200px;
+}
+
+/*body{*/
+
+
+/*}*/
+
+.indexPage {
+  /*background-image: url(../../assets/images/hbghi.jpg);*/
+  background-size: 100% 100%;
+}
+
+
+.swiperMask {
+
+}
+
+.top-header {
+  top: -73px;
 }
 </style>

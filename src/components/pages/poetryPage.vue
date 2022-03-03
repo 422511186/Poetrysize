@@ -9,6 +9,7 @@
               :main_body="poety"
               class="item">
   </poetryCard>
+  <search-input/>
   <footer-box class="footer1"/>
 </template>
 
@@ -21,10 +22,12 @@ import navigationBar from "@/components/navigationBar";
 import LanternCard from "@/components/Lantern";
 import PoetsIndex from "@/components/poetsIndex";
 import BackTop from "@/components/backtop";
+import SearchInput from "@/components/search";
 
 export default {
   name: "poetryPage",
   components: {
+    SearchInput,
     BackTop,
     PoetsIndex,
     // eslint-disable-next-line vue/no-unused-components
