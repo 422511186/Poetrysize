@@ -27,7 +27,6 @@ export default {
 </script>
 <style scoped>
 .bar-box {
-  font-weight: bold;
   float: right;
   margin-right: 100px;
   margin-top: 30px;
@@ -36,7 +35,6 @@ export default {
   height: 80px;
   padding-left: 80px;
   border-radius: 8px;
-  /*background-color: #801c1c;*/
   background-image: url(../assets/images/诗间方寸.png);
   background-size: 100%;
   background-position: center center;
@@ -78,7 +76,6 @@ export default {
 }
 
 .bar-li:hover {
-  /*opacity: 0.8;*/
   cursor: pointer;
   color: white;
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="header" id="header">
-<!--    <div class="mask"></div>-->
+    <!--    <div class="mask"></div>-->
     <!--    <h1 class="title">XXX</h1>-->
     <span class="logo"></span>
     <ul class="header-ul">
@@ -45,9 +45,7 @@ export default {
   background-color: transparent;
   justify-content: space-between;
   vertical-align: bottom;
-  /*min-width: 1500px;*/
   z-index: 11;
-  /*box-shadow: 0 0 5px #888;*/
 }
 
 .title {
