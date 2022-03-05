@@ -1,13 +1,13 @@
 <template>
   <div class="bar-root">
-    <div class="bar-box">
-      <ul class="bar-ul">
-        <li class="bar-li" @click="goAnchor('swiper')">顶部</li>
-        <li class="bar-li" @click="goAnchor('')">每日推荐</li>
-        <li class="bar-li" @click="goAnchor('')">每日一遍</li>
-        <li class="bar-li" @click="goAnchor('about-us')">关于我们</li>
-      </ul>
-    </div>
+<!--    <div class="bar-box">-->
+<!--      <ul class="bar-ul">-->
+<!--        <li class="bar-li" @click="goAnchor('swiper')">顶部</li>-->
+<!--        <li class="bar-li" @click="goAnchor('')">每日推荐</li>-->
+<!--        <li class="bar-li" @click="goAnchor('')">每日一遍</li>-->
+<!--        <li class="bar-li" @click="goAnchor('about-us')">关于我们</li>-->
+<!--      </ul>-->
+<!--    </div>-->
   </div>
 </template>
 <!--侧边导航栏-->
@@ -27,7 +27,7 @@ export default {
 </script>
 <style scoped>
 .bar-box {
-  float: right;
+  /*float: right;*/
   margin-right: 100px;
   margin-top: 30px;
   display: inline-block;
@@ -82,6 +82,7 @@ export default {
 
 .bar-root {
   z-index: 10;
+  position: relative;
 }
 
 </style>
