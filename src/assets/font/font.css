@@ -1,6 +1,91 @@
 @font-face {
-    font-family: "Regular";
+    font-family: "font1";
     src: url('./font.ttf');
     font-weight: normal;
     font-style: normal;
 }
+
+@font-face {
+    font-family: "font2";
+    src: url('./font2.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "font3";
+    src: url('./王汉宗中行书繁.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "font4";
+    src: url('./钟齐志莽行书.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "font5";
+    src: url('./HongLeiBanShuJianTi-2.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "font6";
+    src: url('./YanShiXiaXingKai-2.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "font7";
+    src: url('./汉仪行楷简.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "起名的诗";
+    src: url('./起名的诗.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "每日推荐";
+    src: url('./每日推荐.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "1";
+    src: url('./1.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "2";
+    src: url('./2.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "3";
+    src: url('./3.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "4";
+    src: url('./4.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+

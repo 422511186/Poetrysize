@@ -1,15 +1,22 @@
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import App from './App.vue'
 import router from './router/router'
+import axios from 'axios'
+
+
 import '@/assets/font/font.css'
 
 const app = createApp(App)
 
-// 注入路由
-app.use(router)
+app.config.globalProperties.$axios = axios
 
-app.use(ElementPlus)
+// 注入路由
+app
+    .use(router)
+    .use(ElementPlus)
+    // .use(axios)
+
 app.mount('#app')
 
