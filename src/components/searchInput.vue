@@ -1,5 +1,5 @@
 <template>
-  <div class="searchInput">
+  <div class="searchInput" id="searchInput">
     <el-input
       v-model="value"
       class="input-with-select Input"

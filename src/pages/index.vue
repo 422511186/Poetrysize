@@ -7,30 +7,106 @@
       <div class="yuan"></div>
       <i class="dividing-line"></i>
     </div>
-    <div class="top-box" v-if="show">
+
+    <div class="top-box">
       <div class="prev" @click="reduce"></div>
       <div class="next" @click="add"></div>
-      <el-carousel height="400px"
-                   indicator-position="none"
-                   arrow="never"
-                   :interval="5000"
-                   @change="changeCampus"
-                   ref="remarkCarusel"
+
+      <el-carousel
+        height="400px"
+        indicator-position="none"
+        arrow="never"
+        :interval="5000"
+        @change="changeCampus"
+        ref="remarkCarusel"
+        v-if="show"
       >
         <el-carousel-item v-for="item in poems" :key="item">
-          <i class="type">{{ item.tag }}</i>
+          <!--          <i class="type">{{ item.tag }}</i>-->
           <div class="poem">
             <div>
               <h1>--{{ item.name }}({{ item.poem }})</h1>
             </div>
-            <p>{{ item.content }}</p>
+            <p>
+              {{ item.content }}
+            </p>
           </div>
         </el-carousel-item>
       </el-carousel>
     </div>
-    <functions-component class="main"></functions-component>
-  </div>
+    <!--        <functions-component class="main"></functions-component>-->
+    <nav class="main">
+      <div class="left">
+        <div class="card" @click="this.$router.push(`/forPoetry`)">
+          <i class="ic1"></i>
+          <div class="text">
+            <h2>寻诗</h2>
+            <span>Poetry Seeking</span>
+          </div>
+        </div>
 
+        <div class="card">
+          <i class="ic2"></i>
+          <div class="text">
+            <h2>作诗</h2>
+            <span>Poetry Composing</span>
+          </div>
+        </div>
+
+        <div class="card" @click="this.$router.push('/gameIndex')">
+          <i class="battle-ic"></i>
+          <div class="text">
+            <h2>玩家对战</h2>
+            <span>Player Match</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="right">
+        <div>
+          <router-link to="/doName">
+            <img
+              class="img-1"
+              src="../assets/images/717fbc8fd7397febe946d28e876975a.png"
+              alt=""
+            />
+            <h2>含诗歌姓名生成</h2>
+          </router-link>
+        </div>
+
+        <div>
+          <router-link to="/poster">
+            <img
+              class="img-1"
+              src="../assets/images/8809c146eb1770d79f1df245c4ee29d.png"
+              alt=""
+            />
+            <h2>海报生成</h2>
+          </router-link>
+        </div>
+        <div>
+          <router-link to="">
+            <img
+              class="img-1"
+              src="../assets/images/314e251f95cad1c89f5749113515d00cc83d51cc.png"
+              alt=""
+            />
+            <h2>诗人名录</h2>
+          </router-link>
+        </div>
+        <div>
+          <router-link to="/aiToPoetry">
+            <img
+              class="img-1"
+              src="../assets/images/9cc546f784ae5f63868b180e43f02a4.png"
+              alt=""
+            />
+            <h2>AI对诗</h2>
+          </router-link>
+        </div>
+      </div>
+    </nav>
+  </div>
 </template>
 <!--    每日推荐-->
 <script>
@@ -40,25 +116,27 @@ import FunctionsComponent from "@/components/functions";
 export default {
   name: "main-component",
   // eslint-disable-next-line vue/no-unused-components
-  components: {FunctionsComponent, DailyRecommendation},
+  components: { FunctionsComponent, DailyRecommendation },
   watch: {
     index() {
       console.log(this.index);
-      this.$refs.remarkCarusel.setActiveItem(this.index)
-    }
+      this.$refs.remarkCarusel.setActiveItem(this.index);
+    },
   },
 
   mounted() {
     this.$axios({
-      url: '/api/recommend/',
+      url: "/api/recommend/",
       method: "GET",
-    }).then(res => {
-      this.poems = res.data;
-      this.show = true;
-    }).catch(error => {
-      console.log(error);
-      this.show = true;
     })
+      .then((res) => {
+        this.poems = res.data;
+        this.show = true;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.show = true;
+      });
   },
 
   data() {
@@ -71,43 +149,44 @@ export default {
           dynasty: null,
           poem: "韦应物",
           content: "微雨众卉新，一雷惊蛰始",
-          tag: "惊蛰"
-        }
+          tag: "惊蛰",
+        },
       ],
       show: false,
-    }
+    };
   },
   methods: {
     reduce() {
-      if (this.index === 0)
-        this.index = this.poems.length - 1;
-      else
-        this.index--;
+      if (this.index === 0) this.index = this.poems.length - 1;
+      else this.index--;
     },
     add() {
-      if (this.index === this.poems.length - 1)
-        this.index = 0;
-      else
-        this.index++;
+      if (this.index === this.poems.length - 1) this.index = 0;
+      else this.index++;
     },
     changeCampus(val) {
-      this.index = val
+      this.index = val;
+    },
+
+    getPoem(index) {
+      let poem = this.poems[index];
+      let weather = ["雨", "雪", "晴", "风", "云"];
+      if (weather.indexOf(poem.tag) === -1) return poem.content;
+      return poem.content.substr(0, poem.content.indexOf("。") + 1);
     },
   },
-
 };
 </script>
 
 <style scoped>
 .box {
   width: 1220px;
-  height: 1100px;
   background-color: rgba(255, 255, 255, 0.7);
 }
 
 .box {
   position: relative;
-  margin: -375px auto 200px;
+  margin: -375px auto 100px;
 }
 
 .tag .Text {
@@ -115,7 +194,7 @@ export default {
   font-weight: bold;
   font-size: 22px;
   line-height: 50px;
-  float: right;
+  /*float: right;*/
 }
 
 .tag,
@@ -147,16 +226,6 @@ export default {
   background-repeat: no-repeat;
   background-size: 100%;
   background-image: url(../assets/images/分割线.png);
-}
-
-
-.img {
-  width: 220px;
-  height: 220px;
-  position: absolute;
-  top: 50%;
-  transform: translate(130px, -220%);
-  z-index: 11;
 }
 
 .top-box {
@@ -196,23 +265,6 @@ export default {
   transform: translate(-50%, -100%);
 }
 
-
-.icons {
-  height: 50px;
-  width: 210px;
-}
-
-.icons {
-  position: absolute;
-  left: 50%;
-  bottom: 40px;
-  transform: translateX(-50%);
-}
-
-.icons {
-  display: flex;
-}
-
 .icons > i {
   flex: 1;
 }
@@ -222,42 +274,6 @@ export default {
   display: inline-block;
   background-position: center center;
   background-repeat: no-repeat;
-}
-
-.icon1 {
-  width: 18px;
-  height: 50px;
-  background-size: 18px;
-  background-image: url(../assets/images/上一首.svg);
-}
-
-.icon2 {
-  width: 64px;
-  height: 64px;
-  background-size: 45px;
-  background-image: url(../assets/images/播放.svg);
-}
-
-.icon3 {
-  width: 18px;
-  height: 50px;
-  background-size: 18px;
-  background-image: url(../assets/images/下一首.svg);
-}
-
-.ic {
-  height: 50px;
-  width: 160px;
-}
-
-.ic {
-  position: absolute;
-  top: 310px;
-  left: 160px;
-}
-
-.ic {
-  display: flex;
 }
 
 .ic > i {
@@ -272,30 +288,6 @@ export default {
   width: 24px;
   height: 50px;
   background-size: 24px;
-}
-
-.ic1 {
-  background-image: url(../assets/images/收藏.svg);
-}
-
-.ic1:active {
-  width: 32px;
-  background-size: 32px;
-}
-
-.ic2 {
-  background-image: url(../assets/images/分享.svg);
-}
-
-.ic2:active {
-  width: 32px;
-  background-size: 32px;
-}
-
-.main {
-  position: absolute;
-  top: 400px;
-  margin-bottom: 100px;
 }
 
 .prev,
@@ -331,12 +323,115 @@ export default {
   background-repeat: no-repeat;
   background-size: 100%;
   background-position: center center;
-
 }
-
 
 .type {
   position: relative;
   top: -100px;
+}
+
+.main {
+  height: 480px;
+  padding: 100px 100px;
+  display: flex;
+}
+
+.main .left {
+  box-sizing: border-box;
+  width: 370px;
+  margin-right: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.main .left > div {
+  padding-left: 70px;
+  padding-right: 70px;
+  flex: 1;
+}
+
+.main .left > div:hover {
+  background-color: #eeeeee;
+}
+
+.right {
+  flex: 1;
+  box-sizing: border-box;
+}
+
+.main .right > div {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 50%;
+  height: 240px;
+  /*padding: 20px;*/
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.main .right .pointer:hover {
+  cursor: pointer;
+}
+
+.left .card {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.battle-ic {
+  width: 65px;
+  height: 70px;
+  display: inline-block;
+  background-image: url(../assets/images/对战图标.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 30%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ic1 {
+  width: 50px;
+  height: 70px;
+  display: inline-block;
+  background-image: url(../assets/images/寻诗图标.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 30%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ic2 {
+  width: 70px;
+  height: 70px;
+  display: inline-block;
+  background-image: url(../assets/images/作诗图标.png);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center 30%;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.text {
+  margin-top: 45px;
+}
+
+.text > span {
+  line-height: 50px;
+  font-size: 12px;
+  font-weight: bolder;
+  color: rgb(193, 189, 190);
+}
+
+.img-1 {
+  width: 240px;
+  height: 180px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 </style>

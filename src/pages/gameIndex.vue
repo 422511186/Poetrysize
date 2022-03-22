@@ -1,129 +1,66 @@
 <template>
-  <!--  <div class="game">-->
-  <!--    <h1>time: {{ time }}</h1>-->
-  <!--    <h1>userId: {{ userId }}</h1>-->
-  <!--    <h1>myScore: {{ myScore }}</h1>-->
-  <!--    <h1>score: {{ score }}</h1>-->
-  <!--    <button @click="connect">链接服务</button>-->
-  <!--    <br>-->
-  <!--    <button @click="matchUser">随机匹配</button>-->
-  <!--    <br>-->
-  <!--    <button @click="cancelMatch">取消匹配</button>-->
-  <!--    <br>-->
-  <!--    <button @click="gameOver">结束游戏</button>-->
-  <!--    <br>-->
-  <!--    <button @click="userInPlay">更新分数</button>-->
-  <!--    <br>-->
-  <!--    <button @click="addScore">+5-->
-  <!--    </button>-->
-  <!--    <br>-->
-  <!--    <div class="item" v-for="(item,index) in questions " :key="index">-->
-  <!--      <p>question: {{ item.q }}</p>-->
-  <!--      <p>answer: {{ item.a }}</p>-->
-  <!--      <button @click="commit(index)">提交</button>-->
-  <!--      <br/>-->
-  <!--      <el-input :disabled="isDis[index]" v-model="value[index]" placeholder="Please input"/>-->
-  <!--    </div>-->
-  <!--  </div>-->
   <div class="box">
     <div>
-      <div class="tag"><span class="Text"><router-link to="/">返回首页</router-link></span></div>
+      <div class="tag">
+        <span class="Text"><router-link to="/">返回首页</router-link></span>
+      </div>
       <div class="yuan"></div>
-      <i class="dividing-line"></i>
     </div>
-    <nav class="game-list">
-      <router-link to="/battle">
-        <div class="item">匹配对战</div>
-      </router-link>
-      <router-link to="/">
-        <div class="item">AI对诗</div>
-      </router-link>
-      <router-link to="/">
-        <div class="item">AI对联</div>
-      </router-link>
+    <!-- 标题 -->
+    <h1 class="title" id="title-ai">{{ const_variable.title }}</h1>
+    <!--计时-->
+    <div class="time-box">
+      <div class="time-count">
+        <div class="title-2">{{ const_variable.title_2[1] }}</div>
+        <div class="time">{{ const_variable.time }}</div>
+      </div>
+    </div>
+    <!--规则-->
+    <div class="rules">
+      <div class="rules-text">
+        xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+      </div>
+    </div>
+    <!--分割线-->
+    <i class="dividing-line"></i>
 
-    </nav>
+    <div class="btn-box">
+      <button class="btn" @click="matchUser" v-show="!v_show">开始匹配</button>
+      <button class="btn" @click="cancelMatch" v-show="v_show">取消匹配</button>
+    </div>
   </div>
 </template>
 
 <script>
-
 export default {
   name: "gameIndex",
   mounted() {
-    // this.connect();
-    // this.timesTask();
+    //如果为空，则重新连接
+    if (this.socket === null)
+      this.connect();
   },
   data() {
     return {
-      score: 0,
-      myScore: 0,
-      time: null,//游戏时间
-      timeout: false,
-      isDis: new Array(10).fill(false),
-      userId: null,
-      socket: null,
-      value: [],//用户填写的答案
-      questions: [],//题目和标准答案
-    }
-  },
-  watch: {
-    myScore() {
-      console.log(this.myScore);
-      this.userInPlay();
-    },
+      v_show: false,
+      const_variable: {
+        title: '玩家对战',//标题
+        title_2: ['', '匹配中'],
+        time: '00:00:00',
+        rule: '',//规则
+      },
 
-    time(newValue) {
-      if (newValue === 0) {
-        this.timeout = true;
-        this.gameOver();
-        this.init();
-        alert(`时间到了`)
-      }
+      userId: null, //用户id
+      socket: null, //套接字连接对象
+      socketUrl: "ws://127.0.0.1:5003/game/match/", //套接字连接地址
+
     }
   },
   methods: {
-    //初始化数据(清空)
-    init() {
-      this.time = null;
-      this.score = null;
-      this.myScore = null;
-      this.questions = null;
-    },
-    //定时器
-    timesTask() {
-      if (this.timeout)
-        return;
-      this.time--;
-      setTimeout(this.timesTask, 1000); //time是指本身,延时递归调用自己,100为间隔调用时间,单位毫秒
-    },
-
-    //提交答案并验证
-    commit(index) {
-      if (this.questions[index].a === this.value[index]) {
-        this.$message.success(`true`);
-        this.addScore();
-        this.isDis[index] = true;
-      } else {
-        this.$message.error(`false`);
-        this.reduceScore();
-      }
-
-    },
-    //加分(回答正确)
-    addScore() {
-      this.myScore = this.myScore + 10;
-    },
-    //减分(回答错误) (不限次数)
-    reduceScore() {
-      this.myScore = this.myScore - 5;
-    },
-
     //连接服务端
     connect: function () {
       // this.userId = 'hzy';
       this.userId = this.UUid();
-      let socketUrl = "ws:///192.168.50.176:5003/game/match/" + this.userId;
+      let socketUrl = this.socketUrl + this.userId;
       this.socket = new WebSocket(socketUrl);
       //打开事件
       this.socket.onopen = () => {
@@ -133,32 +70,57 @@ export default {
       this.socket.onmessage = (msg) => {
         let serverMsg = "收到服务端信息: " + msg.data;
         console.log(serverMsg);
-
         let chatMessage = JSON.parse(msg.data)["chatMessage"];
         /**
          * 判断信息类型
          */
-        if (chatMessage['type'] === 'MATCH_USER') {//匹配到对手
-          this.questions = chatMessage["data"]["questions"];
-          this.time = 30;
-          this.timesTask();
-        } else if (chatMessage['type'] === 'PLAY_GAME') {
-          this.score = chatMessage['data']['score'];
-        }
+        //匹配到对手
+        if (chatMessage["type"] === "MATCH_USER") {
+          //匹配到对手
+          // eslint-disable-next-line no-unused-vars
+         let questions = chatMessage["data"]["questions"];
+          this.$message.success(`已成功为你匹配到对手!`)
 
+          // console.log(this.socket.send);
+
+          this.$router.push({
+            name: 'battle',
+            params: {
+              p_socket: JSON.stringify(this.socket),
+              uid: this.userId,
+              q: JSON.stringify(questions),
+            }
+          });
+
+        }
+        //(更新分数)
+        else if (chatMessage["type"] === "PLAY_GAME") {
+          this.score = chatMessage["data"]["score"];
+        }
       };
       //关闭事件
       this.socket.onclose = () => {
         console.log("websocket 已关闭 userId: " + this.userId);
+        this.socket = null;
       };
       //发生了错误事件
       this.socket.onerror = () => {
         console.log("websocket 发生了错误 userId : " + this.userId);
-      }
+        //重新链接
+        console.log(`重新链接`);
+        this.connect();
+      };
     },
-
     // 随机匹配
     matchUser() {
+      if (this.socket === null) {
+        this.$message.error(`与服务器连接断开，请刷新页面...`);
+      }
+
+      this.v_show = !this.v_show;
+
+      this.isGameing = 2;
+      this.$message.info(`开始匹配......`);
       let chatMessage = {};
       let sender = this.userId;
       let type = "MATCH_USER";
@@ -166,10 +128,15 @@ export default {
       chatMessage.type = type;
       console.log("用户:" + sender + "开始匹配......");
       this.socket.send(JSON.stringify(chatMessage));
-
     },
     // 取消匹配
     cancelMatch() {
+      if (this.socket === null) {
+        this.$message.error(`与服务器连接断开，请刷新页面...`);
+      }
+      this.v_show = !this.v_show;
+
+      this.$message.info(`取消匹配......`);
       let chatMessage = {};
       let sender = this.userId;
       let type = "CANCEL_MATCH";
@@ -178,78 +145,53 @@ export default {
       console.log("用户:" + sender + "取消匹配......");
       this.socket.send(JSON.stringify(chatMessage));
     },
-    // 游戏中(更新分数)
-    userInPlay() {
-      let chatMessage = {};
-      let sender = this.userId;
-      // let data = $("#newScoreInput").val();
-      let data = this.myScore;//TODO
-      let type = "PLAY_GAME";
-      chatMessage.sender = sender;
-      chatMessage.data = data;
-      chatMessage.type = type;
-      console.log("用户:" + sender + "更新分数为" + data);
-      this.socket.send(JSON.stringify(chatMessage));
-    },
-    // 游戏结束
-    gameOver() {
-      let chatMessage = {};
-      let sender = this.userId;
-      let type = "GAME_OVER";
-      chatMessage.sender = sender;
-      chatMessage.type = type;
-      console.log("用户:" + sender + "结束游戏");
-      this.socket.send(JSON.stringify(chatMessage));
-      this.questions = null;
-    },
+
     //获取UUID
     UUid() {
-      let aaa = ('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        let r = Math.random() * 16 | 0,
-            v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-      }));
+      let aaa = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+          /[xy]/g,
+          function (c) {
+            let r = (Math.random() * 16) | 0,
+                v = c == "x" ? r : (r & 0x3) | 0x8;
+            return v.toString(16);
+          }
+      );
       return aaa;
     },
-  }
-}
 
+  }
+};
 </script>
 
 <style scoped>
-.game .item {
-  margin: 0 auto;
-  width: 600px;
-  height: 80px;
-}
-
 
 .box {
   width: 1220px;
-  height: 500px;
-  background-color: rgba(255, 255, 255, .7);
-
+  min-height: 500px;
+  background-color: rgba(255, 255, 255, 1);
 }
 
 .box {
   position: relative;
   margin: -375px auto 100px;
+  padding: 30px 60px 100px;
+
 }
 
 .tag .Text {
-  font-family: 'Microsoft YaHei', serif;
+  font-family: "Microsoft YaHei", serif;
   font-weight: bold;
   font-size: 22px;
   line-height: 50px;
-  float: right;
 }
 
-.tag, .yuan {
+.tag,
+.yuan {
   position: absolute;
   height: 50px;
-  background-color: rgba(255, 255, 255, .7);
-  opacity: 0.9;
+  background-color: rgba(255, 255, 255, 1);
   top: -50px;
+  left: 0;
 }
 
 .tag {
@@ -262,12 +204,11 @@ export default {
   border-top-right-radius: 100%;
 }
 
-
 .dividing-line {
+  display: block;
   width: 906px;
   height: 8px;
   position: absolute;
-  bottom: 100px;
   left: 50%;
   transform: translate(-50%, 0);
   background-repeat: no-repeat;
@@ -275,22 +216,73 @@ export default {
   background-image: url(../assets/images/分割线.png);
 }
 
-.game-list {
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, 60px);
-}
-
-.box .item {
-  margin: 15px;
-  width: 400px;
-  background-color: #eeeeee;
-  padding: 20px;
-}
-
-.box .item {
-  font-family: "font2", serif;
+.title {
+  font-family: "font2", Courier, monospace;
+  font-size: 80px;
   font-weight: 400;
-  font-size: 40px;
+}
+
+.time-box {
+  margin-top: 60px;
+  position: relative;
+}
+
+.time-count {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  border: 3px solid #d9d9d9;
+}
+
+.time-count {
+  margin: 0 auto;
+}
+
+
+.title-2 {
+  margin-top: 40px;
+  font-size: 36px;
+  color: #d9d9d9;
+}
+
+.time {
+  font-size: 45px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+.rules {
+  margin: 40px 0 30px;
+}
+
+.rules-text {
+  width: 70%;
+  padding: 20px;
+  text-align: left;
+}
+
+.rules-text {
+  position: relative;
+  left: 50%;
+  transform: translate(-50%, 0);
+  letter-spacing: 2px;
+}
+
+.btn-box {
+  margin-top: 100px;
+}
+
+.btn {
+  height: 60px;
+  width: 200px;
+  border: none;
+  border-radius: 10px;
+  background-color: rgba(90, 219, 96, 1);
+  font-size: 24px;
+  color: #ffffff;
+  cursor: pointer;
 }
 </style>

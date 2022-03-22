@@ -1,7 +1,9 @@
 <template>
   <div class="box">
     <div>
-      <div class="tag"><span class="Text"><router-link to="/">返回首页</router-link></span></div>
+      <div class="tag">
+        <span class="Text"><router-link to="/">返回首页</router-link></span>
+      </div>
       <div class="yuan"></div>
       <i class="dividing-line"></i>
     </div>
@@ -9,65 +11,64 @@
     <div class="title">
       <span class="name">{{ obj.name }}</span>
       <div class="args">
-        <div class="verse" v-for="(it,index) in obj.cont" :key="index">{{ it }}</div>
-        <div class="provenance" v-html=" obj.fromPoet"></div>
+        <div class="verse" v-for="(it, index) in obj.cont" :key="index">
+          {{ it }}
+        </div>
+        <div class="provenance" v-html="obj.fromPoet"></div>
       </div>
     </div>
-    <button class="btn" @click="doName"><span class="text">一键生成</span></button>
+    <button class="btn" @click="doName">
+      <span class="text">一键生成</span>
+    </button>
   </div>
 </template>
 
 <script>
-
-
 export default {
   name: "doName",
   data() {
     return {
-      obj: {
-        // "id": 17,
-        // "name": "婉然",
-        // "fromPoet": "――司马相如《美人赋》",
-        // "cont": "有女独处，婉然在床，奇葩逸丽，淑质艳光。"
-      }
-    }
+      obj: {},
+    };
   },
   methods: {
     doName() {
       this.$axios({
         url: "/api/recomName/",
-        method: 'get'
-      }).then(res => {
-        // console.log(res.data);
+        method: "get",
+      }).then((res) => {
         let data = res.data.data[0];
-        data.cont = data.cont.replaceAll("，", '.');
-        data.cont = data.cont.replaceAll(",", '.');
-        data.cont = data.cont.replaceAll("。", '.');
-        data.cont = data.cont.replaceAll("？", '.');
-        data.cont = data.cont.replaceAll("?", '.');
-        data.cont = data.cont.replaceAll("!", '.');
-        data.cont = data.cont.replaceAll("！", '.');
-        data.cont = data.cont.replaceAll("；", '.');
-        data.cont = data.cont.replaceAll(";", '.');
-        data.cont = data.cont.split('.');
-        data.fromPoet = data.fromPoet.replaceAll('――', '')
-        data.fromPoet = data.fromPoet.replaceAll('《', '<span style="text-orientation: sideways;">《</span> ')
-        data.fromPoet = data.fromPoet.replaceAll('》', '<span style="text-orientation: sideways;">》</span> ')
+        data.cont = data.cont.replaceAll("，", ".");
+        data.cont = data.cont.replaceAll(",", ".");
+        data.cont = data.cont.replaceAll("。", ".");
+        data.cont = data.cont.replaceAll("？", ".");
+        data.cont = data.cont.replaceAll("?", ".");
+        data.cont = data.cont.replaceAll("!", ".");
+        data.cont = data.cont.replaceAll("！", ".");
+        data.cont = data.cont.replaceAll("；", ".");
+        data.cont = data.cont.replaceAll(";", ".");
+        data.cont = data.cont.split(".");
+        data.fromPoet = data.fromPoet.replaceAll("――", "");
+        data.fromPoet = data.fromPoet.replaceAll(
+          "《",
+          '<span style="text-orientation: sideways;">《</span> '
+        );
+        data.fromPoet = data.fromPoet.replaceAll(
+          "》",
+          '<span style="text-orientation: sideways;">》</span> '
+        );
         this.obj = data;
-      })
-    }
-  }
-
+      });
+    },
+  },
 };
 </script>
 
 <style scoped>
-
 .box {
   width: 1220px;
   height: 900px;
-  background-color: rgba(255, 255, 255, .7);
-
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
 .box {
@@ -76,17 +77,18 @@ export default {
 }
 
 .tag .Text {
-  font-family: 'Microsoft YaHei', serif;
+  font-family: "Microsoft YaHei", serif;
   font-weight: bold;
   font-size: 22px;
   line-height: 50px;
-  float: right;
+  /*float: right;*/
 }
 
-.tag, .yuan {
+.tag,
+.yuan {
   position: absolute;
   height: 50px;
-  background-color: rgba(255, 255, 255, .7);
+  background-color: rgba(255, 255, 255, 0.7);
   opacity: 0.9;
   top: -50px;
 }
@@ -100,7 +102,6 @@ export default {
   left: 160px;
   border-top-right-radius: 100%;
 }
-
 
 .dividing-line {
   width: 906px;
@@ -157,7 +158,6 @@ export default {
 }
 
 .btn:focus {
-
 }
 
 .btn > .text {

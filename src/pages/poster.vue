@@ -1,21 +1,29 @@
 <template>
   <div class="poster-box">
     <div>
-      <div class="tag"><span class="Text"><router-link to="/">返回首页</router-link></span></div>
+      <div class="tag">
+        <span class="Text"><router-link to="/">返回首页</router-link></span>
+      </div>
       <div class="yuan"></div>
       <i class="dividing-line"></i>
     </div>
 
     <div class="pre-view">
-      <el-image v-loading="loading" :preview-src-list="[result]" :src="result" class="gif-img" fit="cover">
+      <el-image
+          v-loading="loading"
+          :preview-src-list="[result]"
+          :src="result"
+          class="gif-img"
+          fit="cover"
+      >
         <template v-slot:error>
           <div>
-            <img src="../assets/images/tip.gif" alt="">
+            <img src="../assets/images/tip.gif" alt=""/>
           </div>
         </template>
         <template v-slot:placeholder>
           <div>
-            <img src="../assets/images/tip.gif" alt="">
+            <img src="../assets/images/tip.gif" alt=""/>
           </div>
         </template>
       </el-image>
@@ -23,16 +31,26 @@
 
     <el-input v-model="value" class="input" placeholder="请输入诗句"></el-input>
     <div class="more">
-      <el-select v-model="font.value" placeholder="字体" size="small" suffix-icon="none">
+      <el-select
+          v-model="font.value"
+          placeholder="字体"
+          size="small"
+          suffix-icon="none"
+      >
         <el-option
-            v-for="(item,index) in font.font_options"
+            v-for="(item, index) in font.font_options"
             :class="fontClass[index]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
         />
       </el-select>
-      <el-select v-model="type.value" placeholder="横竖" size="small" suffix-icon="none">
+      <el-select
+          v-model="type.value"
+          placeholder="横竖"
+          size="small"
+          suffix-icon="none"
+      >
         <el-option
             v-for="item in type.type_options"
             :key="item.value"
@@ -40,7 +58,12 @@
             :value="item.value"
         />
       </el-select>
-      <el-select v-model="g.value" placeholder="静动" size="small" suffix-icon="none">
+      <el-select
+          v-model="g.value"
+          placeholder="静动"
+          size="small"
+          suffix-icon="none"
+      >
         <el-option
             v-for="item in g.type_options"
             :key="item.value"
@@ -49,80 +72,90 @@
         />
       </el-select>
     </div>
-    <button class="btn" @click="load"><span class="text">一键生成</span></button>
+    <button class="btn" @click="load">
+      <span class="text">一键生成</span>
+    </button>
     <div class="dividing-line"></div>
     <div class="images-cards">
-      <div v-for="(v,i) in 10" :key="i" :class="i === index?'selected':''" class="card">
-        <el-image :src="Url+v+'.jpg'" class="img" fit="cover" @click="fi(i)"/>
+      <div
+          v-for="(v, i) in 10"
+          :key="i"
+          :class="i === index ? 'selected' : ''"
+          class="card"
+      >
+        <el-image
+            :src="Url + v + '.jpg'"
+            class="img"
+            fit="cover"
+            @click="fi(i)"
+        />
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-
-import qs from 'qs'
+import qs from "qs";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "poster",
   data() {
     return {
-      fontClass: ['font1', 'font2', 'font3', 'font4',],
+      fontClass: ["font1", "font2", "font3", "font4"],
       index: -1,
-      value: '',
-      Url: 'http://localhost:5000/',
-      result: '',
+      value: "",
+      Url: "http://localhost:5000/",
+      result: "",
       loading: false,
       font: {
-        value: '',
+        value: "",
         font_options: [
           {
-            label: '字体1',
+            label: "字体1",
             value: 1,
           },
           {
-            label: '字体2',
+            label: "字体2",
             value: 2,
           },
           {
-            label: '字体3',
+            label: "字体3",
             value: 3,
           },
           {
-            label: '字体4',
+            label: "字体4",
             value: 4,
           },
         ],
-      },//字体
+      }, //字体
       type: {
-        value: '',
+        value: "",
         type_options: [
           {
-            label: '横',
+            label: "横",
             value: 1,
           },
           {
-            label: '竖',
+            label: "竖",
             value: 2,
           },
         ],
-      },//横竖
+      }, //横竖
       g: {
-        value: '',
+        value: "",
         type_options: [
           {
-            label: '动',
+            label: "动",
             value: 1,
           },
           {
-            label: '静',
+            label: "静",
             value: 2,
           },
         ],
-      },//静动
-    }
+      }, //静动
+    };
   },
   mounted() {
 
@@ -132,48 +165,58 @@ export default {
       let len = this.value.length;
       // eslint-disable-next-line no-unused-vars
       new Promise((resolve, reject) => {
-        resolve(this.value.replaceAll('.', '。'));
-      }).then(res => {
-        this.value = res;
-      }).then(() => {
-        if (this.value[len - 1] !== '。') {
-          this.value = this.value + '。';
-        }
-      }).then(() => {
-        console.log('字体 = ' + this.font.value + ',图片 = ' + this.index +
-            '横竖' + this.type.value +
-            ',静动=' + this.g.value + ',诗句=' + this.value)
-        this.loading = true;
-        this.$axios({
-          url: '/api/gif/',
-          method: 'post',
-          data: qs.stringify({
-            fontID: this.font.value,//字体
-            imgID: 3,//图片ID
-            poem: this.value,//诗句
-            type: this.type.value,//横竖
-            g: this.g.value,//静动
-          }),
-          responseType: "blob",
-        }).then(res => {
-          this.result = window.URL.createObjectURL(res.data);
-          this.loading = false;
-        })
+        resolve(this.value.replaceAll(".", "。"));
       })
-
-
+          .then((res) => {
+            this.value = res;
+          })
+          .then(() => {
+            if (this.value[len - 1] !== "。") {
+              this.value = this.value + "。";
+            }
+          })
+          .then(() => {
+            console.log(
+                "字体 = " +
+                this.font.value +
+                ",图片 = " +
+                this.index +
+                "横竖" +
+                this.type.value +
+                ",静动=" +
+                this.g.value +
+                ",诗句=" +
+                this.value
+            );
+            this.loading = true;
+            this.$axios({
+              url: "/api/gif/",
+              method: "post",
+              data: qs.stringify({
+                fontID: this.font.value, //字体
+                imgID: 3, //图片ID
+                poem: this.value, //诗句
+                type: this.type.value, //横竖
+                isGif: this.g.value, //静动
+              }),
+              responseType: "blob",
+            }).then((res) => {
+              this.result = window.URL.createObjectURL(res.data);
+              this.loading = false;
+            });
+          });
     },
     fi(i) {
       this.index = i;
     },
   },
-}
+};
 </script>
 
 <style scoped>
 .poster-box {
   width: 1220px;
-  background-color: rgba(255, 255, 255, .7);
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
 .poster-box {
@@ -183,17 +226,18 @@ export default {
 }
 
 .tag .Text {
-  font-family: 'Microsoft YaHei', serif;
+  font-family: "Microsoft YaHei", serif;
   font-weight: bold;
   font-size: 22px;
   line-height: 50px;
-  float: right;
+  /*float: right;*/
 }
 
-.tag, .yuan {
+.tag,
+.yuan {
   position: absolute;
   height: 50px;
-  background-color: rgba(255, 255, 255, .7);
+  background-color: rgba(255, 255, 255, 0.7);
   opacity: 0.9;
   top: -50px;
 }
@@ -226,7 +270,6 @@ export default {
 }
 
 div > .input >>> .el-input__inner {
-
   height: 60px;
   width: 800px;
   outline-style: none;
@@ -236,7 +279,6 @@ div > .input >>> .el-input__inner {
 .input {
   margin-top: 60px;
   margin-left: 100px;
-
 }
 
 .images-cards {
@@ -249,7 +291,6 @@ div > .input >>> .el-input__inner {
   position: relative;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-
 }
 
 .images-cards > .card {
@@ -298,9 +339,8 @@ div > .input >>> .el-input__inner {
   display: flex;
 }
 
-
 .fromHeader .el-select .el-input {
-  border-color: #409EFF;
+  border-color: #409eff;
 }
 
 div >>> .el-input__inner {
@@ -355,18 +395,18 @@ div >>> .el-input__inner {
 }
 
 .font1 {
-  font-family: '1', serif;
+  font-family: "1", serif;
 }
 
 .font2 {
-  font-family: '2', serif;
+  font-family: "2", serif;
 }
 
 .font3 {
-  font-family: '3', serif;
+  font-family: "3", serif;
 }
 
 .font4 {
-  font-family: '4', serif;
+  font-family: "4", serif;
 }
 </style>

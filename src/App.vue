@@ -1,13 +1,16 @@
 <!--suppress CssUnknownTarget -->
 <template>
   <div id="root">
-<!--    <router-view></router-view>-->
+    <!--    <router-view></router-view>-->
     <div class="index-box">
       <div class="mask"></div>
+
       <header-component></header-component>
+
       <transition name="component-fade" mode="out-in">
         <router-view></router-view>
       </transition>
+
       <footer-box style="z-index: 1"></footer-box>
     </div>
   </div>

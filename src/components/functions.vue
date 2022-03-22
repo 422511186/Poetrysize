@@ -3,54 +3,25 @@
     <div class="functions">
       <div class="tags">
         <h1>诗词分类</h1>
-        <ul>
-          <li class="tag" style="display: flex">
-            <a v-for="(item, index) in tags[0]"
-               :key="index"
-               href="javaScript:void(0)"
-               @click="clickTag(item)">{{ item }}</a>
-          </li>
 
-          <li class="tag" style="display: flex">
-            <a v-for="(item, index) in tags[1]"
-               :key="index"
-               href="javaScript:void(0)"
-               @click="clickTag(item)">{{ item }}</a>
-          </li>
-          <li class="tag" style="display: flex">
-            <a v-for="(item, index) in tags[2]"
-               :key="index"
-               href="javaScript:void(0)"
-               @click="clickTag(item)">{{ item }}</a>
-          </li>
-          <li class="tag" style="display: flex">
-            <a v-for="(item, index) in tags[3]"
-               :key="index"
-               href="javaScript:void(0)"
-               @click="clickTag(item)">{{ item }}</a>
-          </li>
-          <li class="tag" style="display: flex">
-            <a v-for="(item, index) in tags[4]"
-               :key="index"
-               href="javaScript:void(0)"
-               @click="clickTag(item)">{{ item }}</a>
-          </li>
-        </ul>
       </div>
+
       <div class="battle" @click="this.$router.push('/gameIndex')">
         <div class="text">
           <h2>游戏对战</h2>
           <span>Player Match</span>
         </div>
       </div>
+
       <div class="poster" @click="this.$router.push('/poster')">
         <div class="text">
           <h2>海报生成</h2>
           <span>Poster Generation</span>
         </div>
       </div>
+
     </div>
-    <foot-cards></foot-cards>
+<!--    <foot-cards></foot-cards>-->
   </div>
 </template>
 
@@ -122,7 +93,7 @@ export default {
   width: 25%;
   display: inline-block;
   background-image: url(../assets/images/对战图标.png);
-  background-size: 80px;
+  background-size: 90px;
   background-repeat: no-repeat;
   background-position: center 30%;
 }
@@ -140,7 +111,7 @@ export default {
   width: 25%;
   display: inline-block;
   background-image: url(../assets/images/海报图标.png);
-  background-size: 80px;
+  background-size: 90px;
   background-repeat: no-repeat;
   background-position: center 30%;
 }
