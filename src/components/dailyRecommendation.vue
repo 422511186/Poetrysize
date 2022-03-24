@@ -7,7 +7,7 @@
       <i class="dividing-line"></i>
       <div class="box">
         <div>
-          <img alt="11" class="img" src="../assets/images/诗人头像.png"/>
+          <img alt="11" class="img" src="../assets/images/poetImg.png"/>
           <div class="ic">
             <i><span class="ic1"></span></i>
             <i><span class="ic2"></span></i>
@@ -92,7 +92,7 @@ export default {
   transform: translate(-50%, 0);
   background-repeat: no-repeat;
   background-size: 100%;
-  background-image: url(../assets/images/分割线.png);
+  background-image: url(../assets/images/deadline.png);
 }
 
 .img {
@@ -170,21 +170,21 @@ export default {
   width: 18px;
   height: 50px;
   background-size: 18px;
-  background-image: url(../assets/images/上一首.svg);
+  background-image: url(../assets/images/shanyisou.svg);
 }
 
 .icon2 {
   width: 30px;
   height: 50px;
   background-size: 30px;
-  background-image: url(../assets/images/播放.svg);
+  background-image: url(../assets/images/bofan.svg);
 }
 
 .icon3 {
   width: 18px;
   height: 50px;
   background-size: 18px;
-  background-image: url(../assets/images/下一首.svg);
+  background-image: url(../assets/images/yixiasou.svg);
 }
 
 .ic {
@@ -217,7 +217,7 @@ export default {
 }
 
 .ic1 {
-  background-image: url(../assets/images/收藏.svg);
+  background-image: url(../assets/images/souchan.svg);
 }
 
 .ic1:active {
@@ -226,7 +226,7 @@ export default {
 }
 
 .ic2 {
-  background-image: url(../assets/images/分享.svg);
+  background-image: url(../assets/images/fenxian.svg);
 }
 
 .ic2:active {

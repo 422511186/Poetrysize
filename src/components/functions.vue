@@ -92,7 +92,7 @@ export default {
   height: 300px;
   width: 25%;
   display: inline-block;
-  background-image: url(../assets/images/对战图标.png);
+  background-image: url(../assets/images/battle.png);
   background-size: 90px;
   background-repeat: no-repeat;
   background-position: center 30%;
@@ -110,7 +110,7 @@ export default {
   height: 300px;
   width: 25%;
   display: inline-block;
-  background-image: url(../assets/images/海报图标.png);
+  background-image: url(../assets/images/poster.png);
   background-size: 90px;
   background-repeat: no-repeat;
   background-position: center 30%;

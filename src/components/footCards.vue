@@ -3,22 +3,22 @@
     <h1 class="title">功能一览</h1>
     <div class="Cards">
       <div class="card card-margin">
-        <img alt="" class="img" src="../assets/images/诗词入门.png" />
+        <img alt="" class="img" src="../assets/images/toDoor.png" />
         <h1 class="function-text">诗词创作入门</h1>
       </div>
 
       <div class="card card-margin">
-        <img alt="" class="img" src="../assets/images/文学常识.png" />
+        <img alt="" class="img" src="../assets/images/const_log.png" />
         <h1 class="function-text">文学常识大全</h1>
       </div>
 
       <div class="card card-margin">
-        <img alt="" class="img" src="../assets/images/诗人.png" />
+        <img alt="" class="img" src="../assets/images/poet.png" />
         <h1 class="function-text">诗人名录</h1>
       </div>
 
       <div class="card">
-        <img alt="" class="img" src="../assets/images/起名.png" />
+        <img alt="" class="img" src="../assets/images/doName.png" />
         <h1 class="function-text"><router-link to="/doName">含诗歌姓名生成</router-link></h1>
       </div>
     </div>

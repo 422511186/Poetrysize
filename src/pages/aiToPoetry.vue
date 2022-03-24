@@ -23,7 +23,7 @@
         <!--用户对话框-->
         <div v-show="v.user!=='ai'">
           <span class="text">{{ v.msg }}</span>
-          <img src="../assets/images/我.png" alt="" class="avatar2">
+          <img src="../assets/images/mine.png" alt="" class="avatar2">
         </div>
       </div>
 
@@ -87,12 +87,12 @@ export default {
         if (res.data.code === 200) {
           let data = res.data.data[0][0];
           this.messageList.push({user: 'ai', msg: data});
-          console.log(data);
+          // console.log(data);
         }else {
           this.messageList.push({user: 'ai', msg: '对不起，你输入的内容太过超前，本ai智障无法答复！'});
         }
       }).catch(reason => {
-        console.log(reason);
+        // console.log(reason);
         this.$message.error(reason.data);
 
       })
@@ -153,7 +153,7 @@ export default {
   transform: translate(-50%, 0);
   background-repeat: no-repeat;
   background-size: 100%;
-  background-image: url(../assets/images/分割线.png);
+  background-image: url(../assets/images/deadline.png);
 }
 
 .title {
@@ -170,7 +170,7 @@ export default {
 }
 
 .tip {
-  background-image: url(../assets/images/矩形.png);
+  background-image: url(../assets/images/xxxx.png);
 }
 
 .tip > span {

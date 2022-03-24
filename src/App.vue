@@ -62,10 +62,10 @@ a {
   position: absolute;
   height: 100%;
   width: 100%;
-  background-size: cover;
-  background-color: transparent;
-  object-fit: cover;
-  background-image: url(./assets/images/26.png);
+  background-color: rgba(255,255,255,.5);
+  /*background-size: cover;*/
+  /*background-color: transparent;*/
+  /*background-image: url(./assets/images/26.png);*/
 }
 
 

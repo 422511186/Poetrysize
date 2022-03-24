@@ -9,57 +9,63 @@
       <div class="yuan"></div>
       <i class="dividing-line"></i>
     </div>
-
+    <!--    <h1>{{ socket }}</h1>-->
     <!--分数显示-->
-    <div class="Scores">
-      <i class="myScore">我的分数:{{ myScore }}</i>
-      <i class="score">对手的分数:{{ score }}</i>
-      <i class="time">时间:{{ time }}</i>
-    </div>
-
-    <div v-if="isIf">
-      <div class="question-item">
-        <!--          题目-->
-        <h1>{{ questions[index].q }}</h1>
-        <el-input
-            class="question-input"
-            :disabled="isDis[index]"
-            v-model="value[index]"
-            placeholder="Please input"
-        />
-        <button class="commit" @click="commit(index)">提交</button>
+    <div>
+      <div class="Scores">
+        <i class="myScore">我的分数:{{ myScore }}</i>
+        <i class="score">对手的分数:{{ score }}</i>
+        <i class="time">时间:{{ time }}</i>
       </div>
 
-      <div class="btns">
-        <button class="pre" @click="preQuestion">上一题</button>
-        <button class="next" @click="nextQuestion">下一题</button>
+      <div v-if="isIf">
+        <div class="question-item">
+          <!--          题目-->
+          <h1>{{ questions[index].q }}</h1>
+          <el-input
+              class="question-input"
+              :disabled="isDis[index]"
+              v-model="value[index]"
+              placeholder="Please input"
+          />
+          <button class="commit" @click="commit(index)">提交</button>
+        </div>
+
+        <div class="btns">
+          <button class="pre" @click="preQuestion">上一题</button>
+          <button class="next" @click="nextQuestion">下一题</button>
+        </div>
+      </div>
+
+      <div>
+        <button @click="matchUser" v-if="isGameing === 1">开始匹配</button>
+        <button @click="cancelMatch" v-if="isGameing === 2">取消匹配</button>
+        <button @click="gameOver" v-if="isGameing===3">结束游戏</button>
       </div>
     </div>
 
-    <!--    <div>-->
-    <!--      <button @click="matchUser" v-if="isGameing === 1">开始匹配</button>-->
-    <!--      <button @click="cancelMatch" v-if="isGameing === 2">取消匹配</button>-->
-    <!--      <button @click="gameOver" v-if="isGameing===3">结束游戏</button>-->
-    <!--    </div>-->
   </div>
 </template>
 
 <script>
+import bus from "@/assets/js/bus";
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "battle",
   mounted() {
-    console.log(this.socket);
-    console.log(this.socket.onclose);
-    console.log(this.userId);
-    // console.log(this.$route.params.p_socket);
-    // 如果为空，则重新连接
-    this.connect();
+    //通过总线获取值
+    bus.on('socket', value => {
+          this.socket = value;
+          console.log(value.send);
+        }
+    );
   },
   data() {
     return {
-      userId: this.$route.params.uid !== undefined ? this.$route.params.uid : null, //用户id
-      socket: this.$route.params.p_socket !== undefined ? JSON.parse(this.$route.params.p_socket) : null, //套接字连接对象
+      userId:null, //用户id
+      // socket: this.$route.params.p_socket !== undefined ? JSON.parse(this.$route.params.p_socket) : null, //套接字连接对象
+      socket: {}, //套接字连接对象
       socketUrl: "ws://127.0.0.1:5003/game/match/", //套接字连接地址
       isIf: true,//是否显示题目
       isGameing: 1, //按钮显示类型
@@ -75,7 +81,6 @@ export default {
   },
   watch: {
     myScore() {
-      // console.log(this.myScore);
       this.userInPlay();
     },
     time(newValue) {
@@ -97,7 +102,6 @@ export default {
               `你们的分数都是${this.myScore},下次努力超过对手！`
           );
         }
-
         this.init();
         this.gameOver();
       }
@@ -155,7 +159,6 @@ export default {
     reduceScore() {
       this.myScore = this.myScore - 5;
     },
-
     //连接服务端
     connect: function () {
       // this.userId = 'hzy';
@@ -188,11 +191,10 @@ export default {
         }
         //(更新分数)
         else if (chatMessage["type"] === "PLAY_GAME") {
+
           this.score = chatMessage["data"]["score"];
+          console.log(this.score);
         }
-        // else if (chatMessage["type"] === "GAME_OVER") {
-        //
-        // }
       };
       //关闭事件
       this.socket.onclose = () => {
@@ -207,7 +209,6 @@ export default {
         this.connect();
       };
     },
-
     // 随机匹配
     matchUser() {
       if (this.socket === null)
@@ -247,6 +248,7 @@ export default {
       chatMessage.type = type;
       console.log("用户:" + sender + "更新分数为" + data);
       this.socket.send(JSON.stringify(chatMessage));
+
     },
     // 游戏结束
     gameOver() {
@@ -324,7 +326,7 @@ export default {
   transform: translate(-50%, 0);
   background-repeat: no-repeat;
   background-size: 100%;
-  background-image: url(../assets/images/分割线.png);
+  background-image: url(../assets/images/deadline.png);
 }
 
 .Scores {

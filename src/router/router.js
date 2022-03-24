@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 
 const history = createWebHistory()
 
@@ -47,6 +47,16 @@ const router = createRouter({
             path: '/forPoetry',
             name: 'forPoetry',
             component: () => import('@/pages/forPoetry'),
+        },
+        {
+            path: '/poetsList',
+            name: 'poetsList',
+            component: () => import('@/pages/poetsList'),
+        },
+        {
+            path: '/doPoems',
+            name: 'doPoems',
+            component: () => import('@/pages/doPoems'),
         },
         {
             path: '/aiToPoetry',

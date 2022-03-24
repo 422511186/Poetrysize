@@ -13,19 +13,19 @@
       <div class="next" @click="add"></div>
 
       <el-carousel
-        height="400px"
-        indicator-position="none"
-        arrow="never"
-        :interval="5000"
-        @change="changeCampus"
-        ref="remarkCarusel"
-        v-if="show"
+          height="400px"
+          indicator-position="none"
+          arrow="never"
+          :interval="5000"
+          @change="changeCampus"
+          ref="remarkCarusel"
+          v-if="show"
       >
+
         <el-carousel-item v-for="item in poems" :key="item">
-          <!--          <i class="type">{{ item.tag }}</i>-->
           <div class="poem">
             <div>
-              <h1>--{{ item.name }}({{ item.poem }})</h1>
+              <h1>--{{ item.poem }}《{{ item.name }}》</h1>
             </div>
             <p>
               {{ item.content }}
@@ -45,81 +45,76 @@
           </div>
         </div>
 
-        <div class="card">
+        <div class="card" @click="this.$router.push(`/doPoems`)">
           <i class="ic2"></i>
           <div class="text">
             <h2>作诗</h2>
-            <span>Poetry Composing</span>
+            <span>Poetry Making</span>
           </div>
         </div>
 
         <div class="card" @click="this.$router.push('/gameIndex')">
           <i class="battle-ic"></i>
           <div class="text">
-            <h2>玩家对战</h2>
-            <span>Player Match</span>
+            <h2>对战</h2>
+            <span>Player Match &nbsp;</span>
           </div>
         </div>
       </div>
 
       <div class="right">
         <div>
-          <router-link to="/doName">
+          <router-link to="/aiToPoetry">
             <img
-              class="img-1"
-              src="../assets/images/717fbc8fd7397febe946d28e876975a.png"
-              alt=""
+                class="img-1"
+                src="../assets/images/9cc546f784ae5f63868b180e43f02a4.png"
+                alt=""
             />
-            <h2>含诗歌姓名生成</h2>
+            <h2>AI对诗</h2>
           </router-link>
         </div>
-
         <div>
           <router-link to="/poster">
             <img
-              class="img-1"
-              src="../assets/images/8809c146eb1770d79f1df245c4ee29d.png"
-              alt=""
+                class="img-1"
+                src="../assets/images/8809c146eb1770d79f1df245c4ee29d.png"
+                alt=""
             />
             <h2>海报生成</h2>
           </router-link>
         </div>
         <div>
-          <router-link to="">
+          <router-link to="/poetsList">
             <img
-              class="img-1"
-              src="../assets/images/314e251f95cad1c89f5749113515d00cc83d51cc.png"
-              alt=""
+                class="img-1"
+                src="../assets/images/314e251f95cad1c89f5749113515d00cc83d51cc.png"
+                alt=""
             />
             <h2>诗人名录</h2>
           </router-link>
         </div>
         <div>
-          <router-link to="/aiToPoetry">
+          <router-link to="/doName">
             <img
-              class="img-1"
-              src="../assets/images/9cc546f784ae5f63868b180e43f02a4.png"
-              alt=""
+                class="img-1"
+                src="../assets/images/717fbc8fd7397febe946d28e876975a.png"
+                alt=""
             />
-            <h2>AI对诗</h2>
+            <h2>含诗歌姓名生成</h2>
           </router-link>
         </div>
+
       </div>
     </nav>
   </div>
 </template>
 <!--    每日推荐-->
 <script>
-import DailyRecommendation from "@/components/dailyRecommendation";
-import FunctionsComponent from "@/components/functions";
-
 export default {
   name: "main-component",
-  // eslint-disable-next-line vue/no-unused-components
-  components: { FunctionsComponent, DailyRecommendation },
+
   watch: {
     index() {
-      console.log(this.index);
       this.$refs.remarkCarusel.setActiveItem(this.index);
     },
   },
@@ -128,15 +123,12 @@ export default {
     this.$axios({
       url: "/api/recommend/",
       method: "GET",
-    })
-      .then((res) => {
-        this.poems = res.data;
-        this.show = true;
-      })
-      .catch((error) => {
-        console.log(error);
-        this.show = true;
-      });
+    }).then((res) => {
+      this.poems = res.data;
+      this.show = true;
+    }).catch(() => {
+      this.show = true;
+    });
   },
 
   data() {
@@ -194,7 +186,6 @@ export default {
   font-weight: bold;
   font-size: 22px;
   line-height: 50px;
-  /*float: right;*/
 }
 
 .tag,
@@ -225,7 +216,7 @@ export default {
   transform: translate(-50%, 0);
   background-repeat: no-repeat;
   background-size: 100%;
-  background-image: url(../assets/images/分割线.png);
+  background-image: url(../assets/images/deadline.png);
 }
 
 .top-box {
@@ -309,7 +300,7 @@ export default {
   left: 0;
   border-top-right-radius: 30px;
   border-bottom-right-radius: 30px;
-  background-image: url(../assets/images/上一张.svg);
+  background-image: url(../assets/images/prev.svg);
   background-repeat: no-repeat;
   background-size: 100%;
   background-position: center center;
@@ -319,11 +310,16 @@ export default {
   right: 0;
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
-  background-image: url(../assets/images/下一张.svg);
+  background-image: url(../assets/images/next.svg);
   background-repeat: no-repeat;
   background-size: 100%;
   background-position: center center;
 }
+
+.prev:hover, .next:hover {
+  transform: scale(1.25);
+}
+
 
 .type {
   position: relative;
@@ -383,7 +379,7 @@ export default {
   width: 65px;
   height: 70px;
   display: inline-block;
-  background-image: url(../assets/images/对战图标.png);
+  background-image: url(../assets/images/battle.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center 30%;
@@ -393,10 +389,10 @@ export default {
 }
 
 .ic1 {
-  width: 50px;
-  height: 70px;
+  width: 70px;
+  height: 100px;
   display: inline-block;
-  background-image: url(../assets/images/寻诗图标.png);
+  background-image: url(../assets/images/forPoems.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center 30%;
@@ -409,7 +405,7 @@ export default {
   width: 70px;
   height: 70px;
   display: inline-block;
-  background-image: url(../assets/images/作诗图标.png);
+  background-image: url(../assets/images/doPoets.png);
   background-size: 100%;
   background-repeat: no-repeat;
   background-position: center 30%;
@@ -433,5 +429,9 @@ export default {
   width: 240px;
   height: 180px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.img-1:hover {
+  transform: scale(1.05);
 }
 </style>

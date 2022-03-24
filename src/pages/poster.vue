@@ -176,18 +176,18 @@ export default {
             }
           })
           .then(() => {
-            console.log(
-                "字体 = " +
-                this.font.value +
-                ",图片 = " +
-                this.index +
-                "横竖" +
-                this.type.value +
-                ",静动=" +
-                this.g.value +
-                ",诗句=" +
-                this.value
-            );
+            // console.log(
+            //     "字体 = " +
+            //     this.font.value +
+            //     ",图片 = " +
+            //     this.index +
+            //     "横竖" +
+            //     this.type.value +
+            //     ",静动=" +
+            //     this.g.value +
+            //     ",诗句=" +
+            //     this.value
+            // );
             this.loading = true;
             this.$axios({
               url: "/api/gif/",
@@ -391,7 +391,7 @@ div >>> .el-input__inner {
   transform: translate(-50%, 100px);
   background-repeat: no-repeat;
   background-size: 100%;
-  background-image: url(../assets/images/分割线.png);
+  background-image: url(../assets/images/deadline.png);
 }
 
 .font1 {

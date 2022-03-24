@@ -112,7 +112,7 @@ export default {
   transform: translate(-50%, 0);
   background-repeat: no-repeat;
   background-size: 100%;
-  background-image: url(../assets/images/分割线.png);
+  background-image: url(../assets/images/deadline.png);
 }
 
 .title {
