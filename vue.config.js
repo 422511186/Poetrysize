@@ -22,6 +22,14 @@ module.exports = {
                     '^/model': '/'
                 }
             },
+            '/imgUpload': {
+                target: 'http://124.221.195.197:8000/',
+                ws: false,
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/imgUpload': '/'
+                }
+            },
         }
     }
 }

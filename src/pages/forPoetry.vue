@@ -23,6 +23,10 @@
     <!--搜索框-->
     <div class="input-btn">
       <el-input v-model="value" placeholder=""/>
+
+      <label class="upload_img" for="file"></label>
+      <input type="file" name="file" id="file" class="upload" @change="update">
+
       <button class="btn" @click="search">
         <span class="text">搜索</span>
       </button>
@@ -32,9 +36,12 @@
     <!--寻诗结果展示-->
     <div class="poems">
       <div class="drop-shadow" v-for="(item, index) in poety" :key="index">
-        <h3 class="title">{{ item.name }}</h3>
+        <h4 class="title">{{ item.name }}</h4>
         <h4 class="poet">{{ item["poet"] }}</h4>
-        <p v-html="item.content"></p>
+        <div class="content" v-html="item.content" :class="displayAll[index]" :id="'content'+item.id"></div>
+        <button class="play" @click="audioPlay(item.content)">播放</button>
+        <div class="more" @click="more(index)" v-show="countBr(item.content)&&displayAll[index]===''">展开</div>
+        <div class="reduce" @click="reduce(index)" v-show="countBr(item.content)&&displayAll[index]!==''">收起</div>
       </div>
 
       <div class="pagination">
@@ -55,6 +62,7 @@
 
 <script>
 import bus from '../assets/js/bus'
+import {ElLoading} from 'element-plus'
 
 export default {
   name: "forPoetry",
@@ -154,6 +162,8 @@ export default {
       ],
       poety: [],
       type: 1, //分页访问的接口类型 1代表全部古诗接口，其他代表标签接口
+      audio: null,
+      displayAll: new Array(5).fill(``),
     };
   },
   mounted() {
@@ -170,31 +180,82 @@ export default {
       this.getPoems(1, this.size);
     }
     this.hidePage = true;
+
+
   },
   unmounted() {
     bus.emit('bus', true);
+    if (this.audio !== null) {
+      this.audio.pause();
+    }
   },
   methods: {
+    /**
+     * 展开更多
+     */
+    more(index) {
+      this.displayAll[index] = `displayAll`;
+    },
+    /**
+     * 收起更多
+     */
+    reduce(index) {
+      this.displayAll[index] = ``;
+    },
+    /**
+     * 上传图片文件进行寻诗
+     * @param e
+     */
+    update(e) {
+      let file = e.target.files[0];
+      let param = new FormData(); //创建form对象
+      param.append('img', file);//通过append向form对象添加数据
+      // console.log(param.get('img')); //FormData私有类对象，访问不到，可以通过get判断值是否传进去
+      let config = {
+        //添加请求头
+        headers: {"Content-Type": "multipart/form-data"},
+        // //添加上传进度监听事件
+        // onUploadProgress: e => {
+        //   this.progress = ((e.loaded / e.total * 100) | 0) + "%";
+        // }
+      };
+      const loadingInstance = ElLoading.service({fullscreen: true})
+      let url = '/imgUpload/picPoem/';
+      this.$axios.post(url, param, config)
+          .then(res => {
+            this.poety = res.data.data;
+            this.len = 1;
+            loadingInstance.close();
+          })
+          .catch(error => {
+            this.$message.error(`发生错误，错误原因为${error}`)
+            loadingInstance.close();
+          })
+
+    },
+    /**
+     * 切换分页
+     */
     changeClick() {
-      // document.getElementById("start").scrollIntoView();
       if (this.type === 1) {
         this.getPoems(this.page, this.size).then(() => {
           //设置页面移动到诗歌展示的顶部
           document.getElementById("start").scrollIntoView();
+          this.displayAll = new Array(this.size).fill(``);
         });
       } else
         this.getPoemsBLabel(this.page, this.size, this.typeValue).then(() => {
           //设置页面移动到诗歌展示的顶部
           document.getElementById("start").scrollIntoView();
+          this.displayAll = new Array(this.size).fill(``);
         });
     },
-
     //获取全部古诗接口
     async getPoems(p, s) {
       if (p === 1 && this.page !== 1) {
         this.page = 1;
       }
-
+      const loadingInstance = ElLoading.service({fullscreen: true})
       await this.$axios({
         url: "/api/poemsList/",
         method: "get",
@@ -205,8 +266,12 @@ export default {
       }).then((res) => {
         this.poety = res.data.data;
         this.len = res.data.totalLen;
-        console.log(1)
-      });
+        // console.log(1)
+        loadingInstance.close();
+      }).catch(error => {
+        this.$message.error(`发生错误，错误原因为${error}`)
+        loadingInstance.close();
+      })
 
     },
 
@@ -218,7 +283,7 @@ export default {
       }
       //设置分页为标签列表的分类
       this.type = 2;
-
+      const loadingInstance = ElLoading.service({fullscreen: true})
       await this.$axios({
         url: "/api/multiPoem/",
         method: "get",
@@ -230,14 +295,20 @@ export default {
       }).then((res) => {
         this.poety = res.data.data;
         this.len = res.data.totalLen;
-
-      });
+        loadingInstance.close();
+      }).catch(error => {
+        this.$message.error(`发生错误，错误原因为${error}`)
+        loadingInstance.close();
+      })
     },
-    //搜索
+    /**
+     *搜索
+     */
     search() {
       if (this.page !== 1) {
         this.page = 1;
       }
+      const loadingInstance = ElLoading.service({fullscreen: true})
       this.$axios({
         url: "/model/trans/",
         method: "get",
@@ -247,17 +318,74 @@ export default {
       }).then((res) => {
         this.poety = res.data;
         this.len = 1;
-      });
+        this.displayAll = new Array(this.size).fill(``);
+        loadingInstance.close();
+      }).catch(error => {
+        this.$message.error(`发生错误，错误原因为${error}`)
+        loadingInstance.close();
+      })
     },
-  },
-};
+    /**
+     * 语音朗读
+     */
+    audioPlay(value) {
+      value = value.replaceAll('<br>', '');
+      this.$axios({
+        method: 'post',
+        url: '/api/readPoem/?poem=' + value,
+        responseType: 'arraybuffer'
+      }).then((response) => {
+            // 将 blob 数据转换成 url
+            let mp3Url = window.URL.createObjectURL(new Blob([response.data]))
+            // console.log(mp3Url)
+            // 进行音频播放
+            try {
+              //是否已经声明过
+              if (this.audio == null) {
+                this.audio = new Audio();
+                // this.audio.addEventListener('ended', function () {
+                //   localStorage.setItem('audioEnded', true);
+                // }, false);
+              }
+              if (mp3Url) {
+                this.audio.src = mp3Url;
+                this.audio.play();
+              }
+            } catch (e) {
+              console.log(e);
+            }
+          }
+      ).catch(error => {
+        console.log(error)
+      })
+    },
+    /**
+     * 判断是否显示更多按钮
+     * @param content
+     * @returns {boolean}
+     */
+    countBr(content) {
+      let split = content.split('<br>');
+      let brLen = split.length;
+      for (const i in split) {
+        let x = Math.floor(split[i].length / 40);
+        brLen = brLen + x;
+      }
+      if (brLen > 5)
+        return true;
+      return false;
+    },
+  }
+  ,
+}
+;
 </script>
 
 <style scoped>
 .box {
   width: 1220px;
   min-height: 800px;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
 .box {
@@ -275,8 +403,8 @@ export default {
 }
 
 .tag .Text {
-  font-family: "Microsoft YaHei", serif;
-  font-weight: bold;
+  /*font-family: "Microsoft YaHei", serif;*/
+  /*font-weight: bold;*/
   font-size: 22px;
   line-height: 50px;
 }
@@ -285,7 +413,7 @@ export default {
 .yuan {
   position: absolute;
   height: 50px;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.7);
   top: -50px;
 }
 
@@ -308,13 +436,13 @@ export default {
 .tags {
   margin-top: 30px;
   padding: 15px;
-  /* background-color: #eee; */
   text-align: left;
+  font-size: 22px;
 }
 
 .tags > .item {
   display: inline-block;
-  font-weight: bold;
+  /*font-weight: bold;*/
   padding: 5px 15px;
   margin-right: 12px;
   border-radius: 5px;
@@ -325,11 +453,11 @@ export default {
 
 .checked {
   color: #fff;
-  background-color: rgb(61, 165, 238);
+  background-color: rgb(93, 126, 131);
 }
 
 .input-btn {
-  padding-left: 30px;
+  padding-left: 105px;
   margin-top: 60px;
   display: flex;
   justify-content: space-between;
@@ -355,7 +483,7 @@ export default {
   border-radius: 30px;
   outline-style: none;
   border: none;
-  background-color: rgb(61, 165, 238);
+  background-color: rgb(93, 126, 131);
   color: #ffffff;
   font-weight: bold;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -403,8 +531,8 @@ export default {
 }
 
 .drop-shadow {
-  font-family: "Microsoft YaHei", serif;
-  font-weight: bold;
+  /*font-family: "Microsoft YaHei", serif;*/
+  font-family: font7, "Microsoft YaHei", serif;
   margin: 120px auto;
   border-radius: 10px;
   position: relative;
@@ -422,26 +550,65 @@ export default {
 
 .drop-shadow .title {
   margin-bottom: 10px;
-  letter-spacing: 3px;
+  /*letter-spacing: 3px;*/
+  font-size: 40px;
 }
 
 .drop-shadow .poet {
+  margin-left: 20px;
   margin-bottom: 10px;
-  letter-spacing: 3px;
+  /*letter-spacing: 3px;*/
 }
 
-.drop-shadow p {
+.drop-shadow .content {
+
   font-size: 18px;
   line-height: 30px;
-  letter-spacing: 3px;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 5;
+  /*letter-spacing: 3px;*/
+  /*display: -webkit-box;*/
+  /*-webkit-box-orient: vertical;*/
+  /*-webkit-line-clamp: 5;*/
+  max-height: 150px;
   overflow: hidden;
 }
 
-/*.drop-shadow:hover p {*/
-/*  -webkit-line-clamp: unset;*/
-/*}*/
+.drop-shadow .displayAll {
+  /*-webkit-line-clamp: unset;*/
+  max-height: 100%;
+}
+
+.upload_img {
+  width: 40px;
+  height: 50px;
+  background-image: url(../assets/images/imgUpload.svg);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  position: relative;
+  left: -160px;
+  cursor: pointer;
+}
+
+.upload {
+  visibility: hidden;
+  position: absolute;
+}
+
+.play {
+  padding: 10px;
+  position: absolute;
+  top: 0;
+  right: 10px;
+}
+
+.more, .reduce {
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+  opacity: .4;
+  padding: 8px;
+  border-radius: 10px;
+}
 
 </style>

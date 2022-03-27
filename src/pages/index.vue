@@ -13,7 +13,7 @@
       <div class="next" @click="add"></div>
 
       <el-carousel
-          height="400px"
+          height="300px"
           indicator-position="none"
           arrow="never"
           :interval="5000"
@@ -21,7 +21,6 @@
           ref="remarkCarusel"
           v-if="show"
       >
-
         <el-carousel-item v-for="item in poems" :key="item">
           <div class="poem">
             <div>
@@ -41,7 +40,7 @@
           <i class="ic1"></i>
           <div class="text">
             <h2>寻诗</h2>
-            <span>Poetry Seeking</span>
+<!--            <span>Poetry Seeking</span>-->
           </div>
         </div>
 
@@ -49,7 +48,7 @@
           <i class="ic2"></i>
           <div class="text">
             <h2>作诗</h2>
-            <span>Poetry Making</span>
+<!--            <span>Poetry Making</span>-->
           </div>
         </div>
 
@@ -57,7 +56,7 @@
           <i class="battle-ic"></i>
           <div class="text">
             <h2>对战</h2>
-            <span>Player Match &nbsp;</span>
+<!--            <span>Player Match &nbsp;</span>-->
           </div>
         </div>
       </div>
@@ -182,8 +181,8 @@ export default {
 }
 
 .tag .Text {
-  font-family: "Microsoft YaHei", serif;
-  font-weight: bold;
+  /*font-family: "Microsoft YaHei", serif;*/
+  /*font-weight: bold;*/
   font-size: 22px;
   line-height: 50px;
 }
@@ -211,7 +210,7 @@ export default {
   width: 906px;
   height: 8px;
   position: absolute;
-  top: 400px;
+  top: 300px;
   left: 50%;
   transform: translate(-50%, 0);
   background-repeat: no-repeat;
@@ -220,7 +219,7 @@ export default {
 }
 
 .top-box {
-  height: 400px;
+  height: 300px;
   width: 100%;
   position: relative;
 }
@@ -285,7 +284,7 @@ export default {
 .next {
   position: absolute;
   /* 绝对定位的盒子垂直居中 */
-  top: 50%;
+  top: 40%;
   margin-top: -30px;
   /* 加了绝对定位的盒子可以直接设置高度和宽度 */
   width: 40px;
@@ -294,6 +293,7 @@ export default {
   line-height: 60px;
   cursor: pointer;
   z-index: 10;
+  transition: all 0.3s;
 }
 
 .prev {
@@ -328,7 +328,8 @@ export default {
 
 .main {
   height: 480px;
-  padding: 100px 100px;
+  /*padding: 100px 100px;*/
+  padding: 50px 50px;
   display: flex;
 }
 
@@ -360,7 +361,6 @@ export default {
   box-sizing: border-box;
   width: 50%;
   height: 240px;
-  /*padding: 20px;*/
   padding-left: 10px;
   padding-right: 10px;
 }
@@ -373,13 +373,14 @@ export default {
   display: flex;
   justify-content: space-between;
   cursor: pointer;
+  border-bottom: 2px inset #eeeeee;
 }
 
 .battle-ic {
   width: 65px;
   height: 70px;
   display: inline-block;
-  background-image: url(../assets/images/battle.png);
+  background-image: url(../assets/images/yinhua.svg);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center 30%;
@@ -392,7 +393,8 @@ export default {
   width: 70px;
   height: 100px;
   display: inline-block;
-  background-image: url(../assets/images/forPoems.png);
+  /*background-image: url(../assets/images/forPoems.png);*/
+  background-image: url("../assets/images/meihua.svg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center 30%;
@@ -405,7 +407,7 @@ export default {
   width: 70px;
   height: 70px;
   display: inline-block;
-  background-image: url(../assets/images/doPoets.png);
+  background-image: url("../assets/images/san (2).svg");
   background-size: 100%;
   background-repeat: no-repeat;
   background-position: center 30%;
@@ -415,7 +417,10 @@ export default {
 }
 
 .text {
-  margin-top: 45px;
+  font-family: "font2", serif;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
 }
 
 .text > span {
@@ -429,9 +434,19 @@ export default {
   width: 240px;
   height: 180px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: all .35s;
 }
 
 .img-1:hover {
   transform: scale(1.05);
+}
+.right h2{
+  margin-top: 10px;
+  font-weight: 400;
+}
+.left h2{
+  font-size: 50px;
+  letter-spacing: 10px;
+  font-weight: 400;
 }
 </style>

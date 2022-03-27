@@ -22,7 +22,7 @@
     </nav>
     <!--搜索框-->
     <div class="input-btn">
-      <el-input v-model="value" placeholder="Please input"/>
+      <el-input v-model="value" placeholder="请输入..."/>
       <button class="btn" @click="search">
         <span class="text">搜索</span>
       </button>
@@ -35,8 +35,8 @@
         <h2 class="title">{{ item['name'] }}</h2>
         <h3 class="poet">{{ item["dynasty"] }}</h3>
         <div class="content" v-html="item[`desc`]+`<br>`+item[`content`]" :class="displayAll[index]"></div>
-        <div class="more" @click="more(index)" v-show="displayAll[index]===''">展开...</div>
-        <div class="reduce" @click="reduce(index)" v-show="displayAll[index]!==''">收起...</div>
+        <div class="more" @click="more(index)" v-show="displayAll[index]===''">展开</div>
+        <div class="reduce" @click="reduce(index)" v-show="displayAll[index]!==''">收起</div>
       </div>
       <!--分页器-->
       <div class="pagination">
@@ -193,7 +193,7 @@ export default {
 .box {
   width: 1220px;
   min-height: 800px;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
 .box {
@@ -211,8 +211,8 @@ export default {
 }
 
 .tag .Text {
-  font-family: "Microsoft YaHei", serif;
-  font-weight: bold;
+  /*font-family: "Microsoft YaHei", serif;*/
+  /*font-weight: bold;*/
   font-size: 22px;
   line-height: 50px;
 }
@@ -221,7 +221,7 @@ export default {
 .yuan {
   position: absolute;
   height: 50px;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.7);
   top: -50px;
 }
 
@@ -246,11 +246,12 @@ export default {
   padding: 15px;
   /* background-color: #eee; */
   text-align: left;
+  font-size: 22px;
 }
 
 .tags > .item {
   display: inline-block;
-  font-weight: bold;
+  /*font-weight: bold;*/
   padding: 5px 15px;
   margin-right: 12px;
   border-radius: 5px;
@@ -260,18 +261,18 @@ export default {
 
 .checked {
   color: #fff;
-  background-color: rgb(61, 165, 238);
+  background-color: rgb(93, 126, 131);
 }
 
 .input-btn {
-  padding-left: 30px;
+  padding-left: 105px;
   margin-top: 60px;
   display: flex;
   justify-content: space-between;
 }
 
 .input-btn >>> input {
-  height: 50px;
+  height: 60px;
   width: 800px;
 }
 
@@ -290,7 +291,7 @@ export default {
   border-radius: 30px;
   outline-style: none;
   border: none;
-  background-color: rgb(61, 165, 238);
+  background-color: rgb(93, 126, 131);
   color: #ffffff;
   font-weight: bold;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);

@@ -18,10 +18,12 @@
         {{ type }}
       </div>
     </div>
-    <!--寻诗结果分割线-->
-    <!--    <div><i class="dividing-line" id="start"></i></div>-->
     <div class="input-box">
-      <input type="text" :placeholder="tip" v-model="inputValue">
+      <input type="text"
+             @keydown.enter="commit"
+             :placeholder="args.tips"
+             v-model="inputValue"
+             :disabled="!input_show">
       <button @click="commit">生成诗歌</button>
     </div>
     <!--生成结果-->
@@ -39,11 +41,12 @@ export default {
   name: "doPoems",
   data() {
     return {
+      input_show: false,
       types_index: 0,
       args: {
         title: '作诗',
-        types: [`自由诗`, `韵律诗`, `藏字诗`, `藏头诗`],
-        tips: '',
+        types: [`自由诗`, `韵律诗`, `藏头诗`],
+        tips: '禁止输入...',
       },
       doPoem: '澹送襄王欢烛分，行人拜观已缤纷。宝著明年贺世妙，上归死死向吾君。',
       inputValue: '',
@@ -53,15 +56,22 @@ export default {
   methods: {
     //调整选项
     changeIndex(index) {
+      this.inputValue = '';
       this.types_index = index;
-      // console.log(this.args.types[this.types_index])
+      if (this.types_index === 0 || this.types_index === 1) {
+        this.input_show = false;
+        this.args.tips = '禁止输入...';
+      } else {
+        this.input_show = true;
+        this.args.tips = '请输入...';
+      }
     },
 
     /**
      * 生成按钮确认请求事件
      */
     commit() {
-      let httpFunc = [this.free, this.rhy, this.hideWords, this.hideHead]
+      let httpFunc = [this.free, this.rhy, this.hideHead]
       httpFunc[this.types_index]();
     },
     /**
@@ -149,8 +159,8 @@ export default {
 }
 
 .tag .Text {
-  font-family: "Microsoft YaHei", serif;
-  font-weight: bold;
+  /*font-family: "Microsoft YaHei", serif;*/
+  /*font-weight: bold;*/
   font-size: 22px;
   line-height: 50px;
 }
@@ -290,6 +300,7 @@ export default {
 }
 
 .input-box button {
+  height: 52px;
   width: 120px;
   border: none;
   background-color: rgb(161, 49, 47);
@@ -303,7 +314,6 @@ export default {
   margin: 70px auto 0;
   height: 300px;
   width: 755px;
-  /*background-color: #eeeeee;*/
   border: 2px solid rgb(161, 49, 47);
 }
 
@@ -321,5 +331,9 @@ export default {
   align-items: center;
   flex-direction: column;
   height: 250px;
+}
+
+.result-box .poem h1 {
+  font-weight: 400;
 }
 </style>

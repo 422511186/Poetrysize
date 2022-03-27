@@ -3,8 +3,9 @@
     <el-input
         v-model="value"
         class="input-with-select Input"
-        placeholder="Please input"
+        placeholder="请输入..."
         v-if="dis"
+        @keydown.enter="commit"
     >
       <template #prepend>
         <el-select v-model="select" placeholder="Select" style="width: 110px">
@@ -28,7 +29,7 @@ export default {
   data() {
     return {
       dis: true,
-      select: "",
+      select: "poets",
       value: "",//搜索框的值
       Search,
       // data: {},
@@ -124,7 +125,8 @@ export default {
 
 div >>> .el-input__inner {
   height: 50px;
-  border: none;
+  /*border-color: #ffffff;*/
   outline: none;
+  borde: 0;
 }
 </style>

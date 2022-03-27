@@ -45,6 +45,8 @@ a {
 }
 
 #root {
+  font-family: font7, "Microsoft YaHei", serif;
+  font-weight: 400;
   height: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -63,9 +65,6 @@ a {
   height: 100%;
   width: 100%;
   background-color: rgba(255,255,255,.5);
-  /*background-size: cover;*/
-  /*background-color: transparent;*/
-  /*background-image: url(./assets/images/26.png);*/
 }
 
 

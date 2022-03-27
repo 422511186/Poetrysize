@@ -12,7 +12,7 @@
     <!--正在输入中-->
     <div class="tip"><span>{{ tip }}</span></div>
     <!--消息列表-->
-    <div class="message-box">
+    <div class="message-box" id="data-list-content">
 
       <div class="item" v-for="(v,i) in messageList" :key="i+''+v" :class="v.user==='ai'?'left':'right'">
         <!--ai对话框-->
@@ -32,6 +32,12 @@
     <i class="dividing-line"></i>
     <!--发送栏-->
     <div class="send-box">
+      <div class="radio-group">
+        <el-radio-group v-model="operate" size="large" fill="#CEB385">
+          <el-radio-button label="对诗"/>
+          <el-radio-button label="对联"/>
+        </el-radio-group>
+      </div>
       <input class="msg"
              type="text"
              v-model="value"
@@ -66,15 +72,32 @@ export default {
           msg: '草木萌芽甲，山川草木抽。万物有生意，如何不解愁。'
         },
       ], //消息列表
+      operate: "对诗",//对诗、对联模式选择
     };
   },
-  watch: {},
+  watch: {
+    operate() {
+      console.log(this.operate);
+    }
+  },
   methods: {
     commit() {
       if (this.value === null || this.value === '') {
         this.$message.warning('禁止输入为空...')
         return;
       }
+      if (this.operate === "对诗") {
+        this.toPoetry();
+      } else {
+        this.couplet();
+      }
+
+    },
+    /**
+     * 对诗
+     */
+    toPoetry() {
+
       let V = this.value;
 
       this.messageList.push({user: 'mine', msg: V});
@@ -87,19 +110,43 @@ export default {
         if (res.data.code === 200) {
           let data = res.data.data[0][0];
           this.messageList.push({user: 'ai', msg: data});
-          // console.log(data);
-        }else {
+        } else {
           this.messageList.push({user: 'ai', msg: '对不起，你输入的内容太过超前，本ai智障无法答复！'});
         }
-      }).catch(reason => {
-        // console.log(reason);
-        this.$message.error(reason.data);
-
+        this.$nextTick(() => {
+          let div = document.getElementById('data-list-content')
+          div.scrollTop = div.scrollHeight
+        })
+      }).catch(error => {
+        this.$message.error(error);
       })
-      // this.$set(this.messageList, 0 + '', {user: 'mine', msg: this.value});
-      // this.messageList[0] = ({user: 'mine', msg: this.value});
-      // console.log(this.messageList);
+    },
+    /**
+     * 对联
+     */
+    couplet() {
+      let V = this.value;
 
+      this.messageList.push({user: 'mine', msg: V});
+      this.value = '';
+
+      this.$axios({
+        url: '/model/robotCouplet?poem=' + V,
+        method: 'get',
+      }).then(res => {
+        if (res.data.code === 200) {
+          let data = res.data.data[0][0];
+          this.messageList.push({user: 'ai', msg: data});
+        } else {
+          this.messageList.push({user: 'ai', msg: '对不起，你输入的内容太过超前，本ai智障无法答复！'});
+        }
+        this.$nextTick(() => {
+          let div = document.getElementById('data-list-content')
+          div.scrollTop = div.scrollHeight
+        })
+      }).catch(error => {
+        this.$message.error(error);
+      })
     },
   }
 };
@@ -109,7 +156,8 @@ export default {
 .box {
   width: 1220px;
   /*height: 900px;*/
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.7);
+  box-sizing: border-box;
 }
 
 .box {
@@ -119,8 +167,8 @@ export default {
 }
 
 .tag .Text {
-  font-family: "Microsoft YaHei", serif;
-  font-weight: bold;
+  /*font-family: "Microsoft YaHei", serif;*/
+  /*font-weight: bold;*/
   font-size: 22px;
   line-height: 50px;
 }
@@ -129,7 +177,7 @@ export default {
 .yuan {
   position: absolute;
   height: 50px;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.7);
   top: -50px;
   left: 0;
 }
@@ -242,7 +290,7 @@ export default {
   border-radius: 8px;
   color: white;
   font-size: 24px;
-  background-color: rgba(206, 179, 133, 1);
+  background-color: rgb(206, 179, 133);
   cursor: pointer;
 }
 
@@ -265,6 +313,7 @@ export default {
 .avatar1, .avatar2 {
   width: 100px;
   height: 100px;
+  border-radius: 50%;
   object-fit: cover;
   vertical-align: top;
 }
@@ -292,5 +341,10 @@ export default {
   overflow-wrap: anywhere;
   color: #ffffff;
   letter-spacing: 2px;
+}
+
+.radio-group {
+  position: relative;
+  top: -30px;
 }
 </style>

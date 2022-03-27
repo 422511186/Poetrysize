@@ -51,24 +51,23 @@
           <div class="q-index">
             {{ index + 1 }}/10
           </div>
-          <h2>{{ questions[index].name }}</h2>
-          <h4>{{ questions[index].poet }}</h4>
-          <h1>{{ questions[index].question }}</h1>
+                    <h2>{{ questions[index].name }}</h2>
+                    <h4>{{ questions[index].poet }}</h4>
+                    <h1>{{ questions[index].question }}</h1>
         </div>
       </div>
       <!--发送栏-->
       <div class="send-box">
-        <button class="commit" @click="preQuestion">上一题</button>
+        <button class="commit" style="margin-right: 50px" @click="preQuestion">上一题</button>
         <el-input
             class="msg"
             :disabled="isDis[index]"
             v-model="value[index]"
-            placeholder="Please input"
+            placeholder="在此输入..."
         />
-        <button class="commit" @click="commit(index)" :disabled="isDis[index]">提交</button>
-        <button class="commit" @click="gameOver">结束游戏</button>
-        <button class="commit" @click="nextQuestion">下一题</button>
+        <button class="commit" style="margin-left: 50px" @click="nextQuestion">下一题</button>
       </div>
+      <button class="commit" style="margin-top: 20px"  @click="commit(index)" :disabled="isDis[index]">提交</button>
     </div>
 
     <!--结果界面-->
@@ -362,7 +361,8 @@ export default {
 .box {
   width: 1220px;
   min-height: 500px;
-  background-color: rgba(255, 255, 255, 1);
+  background-color: rgba(255, 255, 255, 0.7);
+  box-sizing: border-box;
 }
 
 .box {
@@ -373,8 +373,8 @@ export default {
 }
 
 .tag .Text {
-  font-family: "Microsoft YaHei", serif;
-  font-weight: bold;
+  /*font-family: "Microsoft YaHei", serif;*/
+  /*font-weight: bold;*/
   font-size: 22px;
   line-height: 50px;
 }
@@ -383,7 +383,7 @@ export default {
 .yuan {
   position: absolute;
   height: 50px;
-  background-color: rgba(255, 255, 255, 1);
+  background-color: rgba(255, 255, 255, 0.7);
   top: -50px;
   left: 0;
 }
@@ -476,7 +476,7 @@ export default {
   width: 200px;
   border: none;
   border-radius: 10px;
-  background-color: rgba(90, 219, 96, 1);
+  background-color: rgb(93, 126, 131);
   font-size: 24px;
   color: #ffffff;
   cursor: pointer;
@@ -525,6 +525,9 @@ export default {
 
 .send-box {
   margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 
@@ -532,14 +535,15 @@ export default {
   width: 500px;
   height: 60px;
   box-sizing: border-box;
-  padding: 10px;
+  /*padding: 10px;*/
   font-size: 18px;
+
 }
 
 
 .msg {
   position: relative;
-  transform: translateX(60px);
+  /*transform: translateX(60px);*/
 }
 
 .commit {
@@ -549,12 +553,12 @@ export default {
   border-radius: 8px;
   color: white;
   font-size: 24px;
-  background-color: rgba(206, 179, 133, 1);
+  background-color: rgb(93, 126, 131);
   cursor: pointer;
 }
 
 .commit {
-  margin-left: 100px;
+  /*margin-left: 100px;*/
 }
 
 

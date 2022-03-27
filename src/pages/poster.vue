@@ -29,6 +29,8 @@
       </el-image>
     </div>
 
+
+
     <el-input v-model="value" class="input" placeholder="请输入诗句"></el-input>
     <div class="more">
       <el-select
@@ -78,7 +80,7 @@
     <div class="dividing-line"></div>
     <div class="images-cards">
       <div
-          v-for="(v, i) in 10"
+          v-for="(v, i) in 9"
           :key="i"
           :class="i === index ? 'selected' : ''"
           class="card"
@@ -103,13 +105,13 @@ export default {
   data() {
     return {
       fontClass: ["font1", "font2", "font3", "font4"],
-      index: -1,
+      index: 0,
       value: "",
-      Url: "http://localhost:5000/",
+      Url: "https://raw.githubusercontent.com/422511186/images/main/bgi/",
       result: "",
       loading: false,
       font: {
-        value: "",
+        value: 1,
         font_options: [
           {
             label: "字体1",
@@ -130,7 +132,7 @@ export default {
         ],
       }, //字体
       type: {
-        value: "",
+        value: 1,
         type_options: [
           {
             label: "横",
@@ -143,7 +145,7 @@ export default {
         ],
       }, //横竖
       g: {
-        value: "",
+        value: 2,
         type_options: [
           {
             label: "动",
@@ -155,6 +157,7 @@ export default {
           },
         ],
       }, //静动
+
     };
   },
   mounted() {
@@ -166,45 +169,33 @@ export default {
       // eslint-disable-next-line no-unused-vars
       new Promise((resolve, reject) => {
         resolve(this.value.replaceAll(".", "。"));
-      })
-          .then((res) => {
-            this.value = res;
-          })
-          .then(() => {
-            if (this.value[len - 1] !== "。") {
-              this.value = this.value + "。";
-            }
-          })
-          .then(() => {
-            // console.log(
-            //     "字体 = " +
-            //     this.font.value +
-            //     ",图片 = " +
-            //     this.index +
-            //     "横竖" +
-            //     this.type.value +
-            //     ",静动=" +
-            //     this.g.value +
-            //     ",诗句=" +
-            //     this.value
-            // );
-            this.loading = true;
-            this.$axios({
-              url: "/api/gif/",
-              method: "post",
-              data: qs.stringify({
-                fontID: this.font.value, //字体
-                imgID: 3, //图片ID
-                poem: this.value, //诗句
-                type: this.type.value, //横竖
-                isGif: this.g.value, //静动
-              }),
-              responseType: "blob",
-            }).then((res) => {
-              this.result = window.URL.createObjectURL(res.data);
-              this.loading = false;
-            });
-          });
+      }).then((res) => {
+        this.value = res;
+      }).then(() => {
+        if (this.value[len - 1] !== "。") {
+          this.value = this.value + "。";
+        }
+      }).then(() => {
+        this.loading = true;
+        console.log(this.index)
+        console.log(this.index + 1)
+        this.$axios({
+          url: "/api/gif/",
+          method: "post",
+          data: qs.stringify({
+            fontID: this.font.value, //字体
+            imgID: this.index + 1, //图片ID
+            poem: this.value, //诗句
+            type: this.type.value, //横竖
+            isGif: this.g.value, //静动
+          }),
+          responseType: "blob",
+        }).then((res) => {
+          this.result = window.URL.createObjectURL(res.data);
+          this.loading = false;
+
+        });
+      });
     },
     fi(i) {
       this.index = i;
@@ -226,8 +217,8 @@ export default {
 }
 
 .tag .Text {
-  font-family: "Microsoft YaHei", serif;
-  font-weight: bold;
+  /*font-family: "Microsoft YaHei", serif;*/
+  /*font-weight: bold;*/
   font-size: 22px;
   line-height: 50px;
   /*float: right;*/
@@ -254,7 +245,7 @@ export default {
 
 .pre-view {
   width: 1000px;
-  height: 313px;
+  /*height: 313px;*/
   /*background-color: #accfe0;*/
 }
 
@@ -367,7 +358,7 @@ div >>> .el-input__inner {
   border-radius: 30px;
   outline-style: none;
   border: none;
-  background-color: rgb(61, 165, 238);
+  background-color: rgb(93, 126, 131);
   color: #ffffff;
   font-weight: bold;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -386,7 +377,6 @@ div >>> .el-input__inner {
   width: 906px;
   height: 8px;
   position: relative;
-  /*top: 400px;*/
   left: 50%;
   transform: translate(-50%, 100px);
   background-repeat: no-repeat;
