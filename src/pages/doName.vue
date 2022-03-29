@@ -8,9 +8,9 @@
       <i class="dividing-line"></i>
     </div>
 
-    <div class="title">
+    <div class="title" v-loading="loading">
       <span class="name">{{ obj.name }}</span>
-      <div class="args">
+      <div class="args" >
         <div class="verse" v-for="(it, index) in obj.cont" :key="index">
           {{ it }}
         </div>
@@ -29,10 +29,12 @@ export default {
   data() {
     return {
       obj: {},
+      loading: false,
     };
   },
   methods: {
     doName() {
+      this.loading = true;
       this.$axios({
         url: "/api/recomName/",
         method: "get",
@@ -50,15 +52,19 @@ export default {
         data.cont = data.cont.split(".");
         data.fromPoet = data.fromPoet.replaceAll("――", "");
         data.fromPoet = data.fromPoet.replaceAll(
-          "《",
-          '<span style="text-orientation: sideways;">《</span> '
+            "《",
+            '<span style="text-orientation: sideways;">《</span> '
         );
         data.fromPoet = data.fromPoet.replaceAll(
-          "》",
-          '<span style="text-orientation: sideways;">》</span> '
+            "》",
+            '<span style="text-orientation: sideways;">》</span> '
         );
         this.obj = data;
-      });
+        this.loading = false;
+      }).catch(error => {
+        this.$message.error(`发生错误，错误原因为${error}`)
+        this.loading = false;
+      })
     },
   },
 };
@@ -77,11 +83,8 @@ export default {
 }
 
 .tag .Text {
-  /*font-family: "Microsoft YaHei", serif;*/
-  /*font-weight: bold;*/
   font-size: 22px;
   line-height: 50px;
-  /*float: right;*/
 }
 
 .tag,

@@ -436,7 +436,6 @@ export default {
 .title-2 {
   margin-top: 40px;
   font-size: 36px;
-  /*color: #d9d9d9;*/
 }
 
 .time {
@@ -457,7 +456,6 @@ export default {
   padding: 20px;
   text-align: left;
   font-size: 22px;
-  font-weight: bold;
 }
 
 .rules-text {

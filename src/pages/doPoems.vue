@@ -32,6 +32,19 @@
       <div class="poem">
         <h1 v-for="(item,index) in doPoem.split('。')" :key="index">{{ item }}</h1>
       </div>
+      <div class="emo-analyze">
+        <ul>
+          <li>情感分析结果:
+            <span>
+              {{
+                emo_analyze.sentiment_key === 'positive' ? '积极' : (emo_analyze.sentiment_key === 'negative' ? '消极' : '')
+              }}
+              </span>
+          </li>
+          <li>积极置信度:<span>{{ emo_analyze.positive_probs }}</span></li>
+          <li>消极置信度:<span>{{ emo_analyze.negative_probs }}</span></li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -50,6 +63,12 @@ export default {
       },
       doPoem: '澹送襄王欢烛分，行人拜观已缤纷。宝著明年贺世妙，上归死死向吾君。',
       inputValue: '',
+      emo_analyze: {
+        "sentiment_label": null,
+        "sentiment_key": null,
+        "positive_probs": null,
+        "negative_probs": null
+      }
     }
   },
   computed: {},
@@ -84,6 +103,9 @@ export default {
         method: 'get',
       }).then(res => {
         this.doPoem = res.data[`data`];
+        return this.doPoem;
+      }).then(data => {
+        this.emo(data);
       })
     },
     /**
@@ -97,6 +119,9 @@ export default {
         method: 'get',
       }).then(res => {
         this.doPoem = res.data[`data`];
+        return this.doPoem;
+      }).then(data => {
+        this.emo(data);
       })
     },
 
@@ -113,6 +138,9 @@ export default {
         }
       }).then(res => {
         this.doPoem = res.data[`data`];
+        return this.doPoem;
+      }).then(data => {
+        this.emo(data);
       })
     },
 
@@ -120,7 +148,7 @@ export default {
      * 生成藏头诗
      */
     hideHead() {
-      let url = '/hideHead/'
+      let url = '/hideHead/';
       this.$axios({
         url: '/api' + url,
         method: 'get',
@@ -129,8 +157,30 @@ export default {
         }
       }).then(res => {
         this.doPoem = res.data[`data`];
+        return this.doPoem;
+      }).then(data => {
+        this.emo(data);
       })
     },
+    /**
+     * 情感分析
+     * @param content 需要分析的文字段落
+     */
+    emo(content) {
+      console.log(content);
+      let url = `/emo/`;
+      this.$axios({
+        url: '/model' + url,
+        method: 'get',
+        params: {
+          content: content
+        }
+      }).then(res => {
+        console.log(res.data[0]);
+        this.emo_analyze = res.data[0];
+      })
+    }
+
 
   }
 }
@@ -314,7 +364,8 @@ export default {
   margin: 70px auto 0;
   height: 300px;
   width: 755px;
-  border: 2px solid rgb(161, 49, 47);
+  outline: 2px solid rgb(161, 49, 47);
+  position: relative;
 }
 
 .result-box h3 {
@@ -335,5 +386,26 @@ export default {
 
 .result-box .poem h1 {
   font-weight: 400;
+}
+
+.emo-analyze {
+  width: 200px;
+  color: rgb(161, 49, 47);
+  font-size: 16px;
+}
+
+.emo-analyze {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform: translateY(100%);
+}
+
+.emo-analyze li {
+  list-style: none;
+  padding: 6px 0;
+}
+.emo-analyze span{
+  color: black;
 }
 </style>

@@ -10,15 +10,31 @@
     <h1 class="title" id="title-for">诗人名录</h1>
     <!--古诗分类标签-->
     <nav class="tags">
-      <span
-          class="item"
-          v-for="(item, index) in tags"
-          :key="index"
-          :class="index === typeValue ? 'checked' : ''"
-          @click="getPoets(index)"
-      >
+      <div>
+        <span class="tags-2">朝代</span>
+        <span
+            class="item"
+            v-for="(item, index) in tags.slice(0,11)"
+            :key="index"
+            :class="index === typeValue ? 'checked' : ''"
+            @click="getPoets(index)"
+        >
         {{ item }}
       </span>
+      </div>
+
+      <div style="margin-top: 10px">
+        <span class="tags-2">派别</span>
+        <span
+            class="item"
+            v-for="(item, index) in tags.slice(11,tags.length)"
+            :key="index+11"
+            :class="index+11 === typeValue ? 'checked' : ''"
+            @click="getPoets(index+11)"
+        >
+        {{ item }}
+      </span>
+      </div>
     </nav>
     <!--搜索框-->
     <div class="input-btn">
@@ -32,11 +48,17 @@
     <!--诗人结果展示-->
     <div class="poets">
       <div class="drop-shadow" v-for="(item, index) in poets" :key="index">
+
+        <img style="display:inline-block;float: left;margin: 10px;height: 150px;width: 105px;object-fit: cover"
+             :src="item.image===''? img:item.image" alt="">
+
         <h2 class="title">{{ item['name'] }}</h2>
-        <h3 class="poet">{{ item["dynasty"] }}</h3>
-        <div class="content" v-html="item[`desc`]+`<br>`+item[`content`]" :class="displayAll[index]"></div>
-        <div class="more" @click="more(index)" v-show="displayAll[index]===''">展开</div>
-        <div class="reduce" @click="reduce(index)" v-show="displayAll[index]!==''">收起</div>
+        <p class="poet">{{ item["dynasty"] }}</p>
+        <p class="content" v-html="item[`desc`]+`<br>`+item[`content`]"></p>
+        <!--        <p class="content" v-html="item[`desc`]+`<br>`+item[`content`]" :class="displayAll[index]"></p>-->
+
+        <!--        <div class="more" @click="more(index)" v-show="displayAll[index]===''">展开</div>-->
+        <!--        <div class="reduce" @click="reduce(index)" v-show="displayAll[index]!==''">收起</div>-->
       </div>
       <!--分页器-->
       <div class="pagination">
@@ -57,16 +79,19 @@
 <!--诗人名录xs-->
 <script>
 import bus from "@/assets/js/bus";
+import {ElLoading} from "element-plus";
 
 export default {
   name: "poetsList",
   data() {
     return {
+      img: 'https://song.gushiwen.cn/authorImg/wangbo.jpg',
       hidePage: false,
       displayAll: new Array(this.size).fill(``),
       value: '',//搜索框的值
       typeValue: -1, //记录当前选择标签的下标
       tags: [
+
         "全部",
         "先秦",
         "五代",
@@ -78,11 +103,11 @@ export default {
         "元代",
         "明代",
         "清代",
+
         "现实主义",
         "浪漫主义",
         "建安七子",
         "竹林七贤",
-        "初唐四杰",
         "婉约派",
         "豪放派",
         "山水诗派",
@@ -113,6 +138,17 @@ export default {
   unmounted() {
     bus.emit('bus', true);
   },
+  /**
+   * 数据更新时，设置元素内嵌滚动条自动回到顶部
+   */
+  updated() {
+    this.$nextTick(() => {
+      let ele = document.getElementsByClassName('drop-shadow');
+      for (let i = 0; i < ele.length; i++) {
+        ele[i].scrollTop = 350 + 'px';
+      }
+    })
+  },
   methods: {
     more(index) {
       this.displayAll[index] = `displayAll`;
@@ -140,6 +176,8 @@ export default {
       if (this.typeValue !== -1)
         this.page = 1;
       this.typeValue = -1;
+      const loadingInstance = ElLoading.service({fullscreen: true})
+
       await this.$axios({
         url: "/api/multiPoet/",
         method: "get",
@@ -152,10 +190,11 @@ export default {
         this.poets = res.data.data;
         this.len = res.data.totalLen;
         this.displayAll = new Array(this.size).fill(``);
-        //设置页面移动到诗歌展示的顶部
-        // document.getElementById("start").scrollIntoView();
-      }).catch(() => {
-        this.$message.error('请求出现错误...')
+        loadingInstance.close();
+
+      }).catch(error => {
+        this.$message.error(`请求发生错误，错误原因为${error}`)
+        loadingInstance.close();
       })
 
     },
@@ -165,7 +204,7 @@ export default {
         this.typeValue = label_index;
         this.page = 1;
       }
-
+      const loadingInstance = ElLoading.service({fullscreen: true})
       await this.$axios({
         url: "/api/multiPoet/",
         method: "get",
@@ -178,10 +217,11 @@ export default {
         this.poets = res.data.data;
         this.len = res.data[`totalLen`];
         this.displayAll = new Array(this.size).fill(``);
-        //设置页面移动到诗歌展示的顶部
-        // document.getElementById("start").scrollIntoView();
-      }).catch(() => {
-        this.$message.error('请求出现错误...')
+        loadingInstance.close();
+
+      }).catch(error => {
+        this.$message.error(`请求发生错误，错误原因为${error}`)
+        loadingInstance.close();
       })
     },
   }
@@ -244,18 +284,15 @@ export default {
 .tags {
   margin-top: 30px;
   padding: 15px;
-  /* background-color: #eee; */
   text-align: left;
   font-size: 22px;
 }
 
-.tags > .item {
+.tags .item {
   display: inline-block;
-  /*font-weight: bold;*/
-  padding: 5px 15px;
+  padding: 10px;
   margin-right: 12px;
   border-radius: 5px;
-  line-height: 40px;
   cursor: pointer;
 }
 
@@ -339,21 +376,40 @@ export default {
 }
 
 .drop-shadow {
-  font-family: "Microsoft YaHei", serif;
-  font-weight: bold;
   margin: 120px auto;
   border-radius: 10px;
   position: relative;
   width: 60%;
   max-width: 70%;
   padding: 2em 2em 3em;
-  text-align: center;
-  background-color: rgba(253, 247, 209, 0.4);
+  /*background-color: rgba(253, 247, 209, 0.4);*/
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-image: url("../assets/images/bgi1.jpg");
+  background-position: left center;
+  background-repeat: no-repeat;
 }
 
 .drop-shadow {
   text-align: left;
+  height: 350px;
+  overflow: auto;
+}
+
+.drop-shadow::-webkit-scrollbar {
+  width: 2px;
+}
+
+.drop-shadow::-webkit-scrollbar-track {
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em;
+}
+
+.drop-shadow::-webkit-scrollbar-thumb {
+  background-color: #cbc5c5;
+  -webkit-border-radius: 2em;
+  -moz-border-radius: 2em;
+  border-radius: 2em;
 }
 
 .drop-shadow .title {
@@ -370,14 +426,15 @@ export default {
   font-size: 18px;
   line-height: 30px;
   letter-spacing: 3px;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 5;
-  overflow: hidden;
+  /*display: -webkit-box;*/
+  /*-webkit-box-orient: vertical;*/
+  /*-webkit-line-clamp: 5;*/
+  /*overflow: hidden;*/
 }
 
 .drop-shadow .displayAll {
   -webkit-line-clamp: unset;
+  /*height: auto;*/
 }
 
 .content h1, .content h2, .content h3, .content h4, .content h5 {
@@ -394,5 +451,12 @@ export default {
   border-radius: 10px;
 }
 
+.tags-2 {
+  padding: 10px;
+  background-color: rgb(93, 126, 131);
+  margin-right: 20px;
+  color: #ffffff;
+  margin-left: 30px;
+}
 
 </style>

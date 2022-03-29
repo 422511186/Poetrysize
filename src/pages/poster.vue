@@ -193,8 +193,10 @@ export default {
         }).then((res) => {
           this.result = window.URL.createObjectURL(res.data);
           this.loading = false;
-
-        });
+        }).catch(error => {
+          this.$message.error(`发生错误，错误原因为${error}`)
+          this.loading = false;
+        })
       });
     },
     fi(i) {
@@ -221,7 +223,6 @@ export default {
   /*font-weight: bold;*/
   font-size: 22px;
   line-height: 50px;
-  /*float: right;*/
 }
 
 .tag,

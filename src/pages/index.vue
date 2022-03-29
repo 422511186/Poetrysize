@@ -40,7 +40,7 @@
           <i class="ic1"></i>
           <div class="text">
             <h2>寻诗</h2>
-<!--            <span>Poetry Seeking</span>-->
+            <!--            <span>Poetry Seeking</span>-->
           </div>
         </div>
 
@@ -48,7 +48,7 @@
           <i class="ic2"></i>
           <div class="text">
             <h2>作诗</h2>
-<!--            <span>Poetry Making</span>-->
+            <!--            <span>Poetry Making</span>-->
           </div>
         </div>
 
@@ -56,7 +56,7 @@
           <i class="battle-ic"></i>
           <div class="text">
             <h2>对战</h2>
-<!--            <span>Player Match &nbsp;</span>-->
+            <!--            <span>Player Match &nbsp;</span>-->
           </div>
         </div>
       </div>
@@ -440,11 +440,13 @@ export default {
 .img-1:hover {
   transform: scale(1.05);
 }
-.right h2{
+
+.right h2 {
   margin-top: 10px;
   font-weight: 400;
 }
-.left h2{
+
+.left h2 {
   font-size: 50px;
   letter-spacing: 10px;
   font-weight: 400;

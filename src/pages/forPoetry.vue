@@ -6,25 +6,93 @@
       </div>
       <div class="yuan"></div>
     </div>
+
+    <el-dialog v-model="dialogFormVisible"
+               lock-scroll=true
+               title="选择搜索类别">
+      <el-form-item label="种类" label-width="140px">
+        <el-select v-model="region" placeholder="">
+          <el-option label="唐诗" value="1"/>
+          <el-option label="宋词" value="2"/>
+        </el-select>
+      </el-form-item>
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="clickInput">确定</el-button>
+      </span>
+      </template>
+    </el-dialog>
+
     <!-- 标题 -->
     <h1 class="title" id="title-for">寻诗</h1>
     <!--古诗分类标签-->
     <nav class="tags">
-      <span
-          class="item"
-          v-for="(item, index) in tags"
-          :key="index"
-          :class="index === typeValue ? 'checked' : ''"
-          @click="getPoemsBLabel(1, 5, index)"
-      >
-        {{ item }}
-      </span>
+
+      <div style="margin-top: 10px;display: flex;flex-wrap: wrap">
+        <span class="tags-2">朝代</span>
+        <div style="flex: 1">
+          <span
+              class="item"
+              v-for="(item, index) in tags.slice(0,11)"
+              :key="index"
+              :class="index === typeValue ? 'checked' : ''"
+              @click="getPoemsBLabel(1, 5, index)">
+          {{ item }}
+        </span>
+        </div>
+      </div>
+
+      <div style="margin-top: 10px;display: flex;flex-wrap: wrap">
+        <span class="tags-2">对象</span>
+        <div style="flex: 1">
+            <span
+                class="item"
+                v-for="(item, index) in tags.slice(11,23)"
+                :key="index+11"
+                :class="index+11 === typeValue ? 'checked' : ''"
+                @click="getPoemsBLabel(1, 5, index+11)">
+            {{ item }}
+            </span>
+        </div>
+      </div>
+
+
+      <div style="margin-top: 10px;display: flex;flex-wrap: wrap">
+        <span class="tags-2">节日</span>
+        <div style="flex: 1">
+            <span
+                class="item"
+                v-for="(item, index) in tags.slice(23,31)"
+                :key="index+23"
+                :class="index+23 === typeValue ? 'checked' : ''"
+                @click="getPoemsBLabel(1, 5, index+23)">
+            {{ item }}
+            </span>
+        </div>
+      </div>
+
+      <div style="margin-top: 10px;display: flex;flex-wrap: wrap">
+        <span class="tags-2">情感</span>
+        <div style="flex: 1">
+            <span
+                class="item"
+                v-for="(item, index) in tags.slice(31,tags.length)"
+                :key="index+31"
+                :class="index+31 === typeValue ? 'checked' : ''"
+                @click="getPoemsBLabel(1, 5, index+31)">
+            {{ item }}
+            </span>
+        </div>
+      </div>
+
     </nav>
     <!--搜索框-->
     <div class="input-btn">
       <el-input v-model="value" placeholder=""/>
 
-      <label class="upload_img" for="file"></label>
+      <label class="upload_img" @click="xxx"></label>
+
       <input type="file" name="file" id="file" class="upload" @change="update">
 
       <button class="btn" @click="search">
@@ -33,13 +101,14 @@
     </div>
     <!--寻诗结果分割线-->
     <div><i class="dividing-line" id="start"></i></div>
+
     <!--寻诗结果展示-->
     <div class="poems">
       <div class="drop-shadow" v-for="(item, index) in poety" :key="index">
         <h4 class="title">{{ item.name }}</h4>
         <h4 class="poet">{{ item["poet"] }}</h4>
         <div class="content" v-html="item.content" :class="displayAll[index]" :id="'content'+item.id"></div>
-        <button class="play" @click="audioPlay(item.content)">播放</button>
+        <i class="play" @click="audioPlay(item.content)"></i>
         <div class="more" @click="more(index)" v-show="countBr(item.content)&&displayAll[index]===''">展开</div>
         <div class="reduce" @click="reduce(index)" v-show="countBr(item.content)&&displayAll[index]!==''">收起</div>
       </div>
@@ -68,6 +137,9 @@ export default {
   name: "forPoetry",
   data() {
     return {
+      dialogFormVisible: false,
+      region: '1',
+
       hidePage: false,
       page: 1, //页码
       len: 0,
@@ -75,90 +147,10 @@ export default {
       size: 5,
       value: "",
       tags: [
-        "全部",
-        "先秦",
-        "五代",
-        "魏晋",
-        "南北朝",
-        "两汉",
-        "唐代",
-        "宋代",
-        "元代",
-        "明代",
-        "清代",
-        "诗经",
-        "楚辞",
-        "乐府",
-        "春天",
-        "夏天",
-        "秋天",
-        "冬天",
-        "写雨",
-        "写风",
-        "写花",
-        "梅花",
-        "荷花",
-        "菊花",
-        "写山",
-        "写水",
-        "长江",
-        "黄河",
-        "儿童",
-        "写鸟",
-        "写马",
-        "写景",
-        "写人",
-        "山水",
-        "写山",
-        "写水",
-        "写雪",
-        "月亮",
-        "写风",
-        "边塞",
-        "地名",
-        "节日",
-        "春节",
-        "元宵",
-        "寒食",
-        "清明",
-        "咏物",
-        "女子",
-        "春天",
-        "秋天",
-        "赞美",
-        "春节",
-        "三曹",
-        "元宵节",
-        "清明节",
-        "端午",
-        "中秋",
-        "重阳",
-        "七夕",
-        "寒食",
-        "抒情",
-        "婉约",
-        "抒怀",
-        "思念",
-        "爱情",
-        "送别",
-        "思乡",
-        "离别",
-        "怀人",
-        "友情",
-        "相思",
-        "孤独",
-        "励志",
-        "豪放",
-        // "现实主义",
-        // "浪漫主义",
-        // "建安七子",
-        // "竹林七贤",
-        // "初唐四杰",
-        // "婉约派",
-        // "豪放派",
-        // "山水诗派",
-        // "田园诗派",
-        // "边塞诗派",
+        "全部", "先秦", "五代", "魏晋", "南北朝", "两汉", "唐代", "宋代", "元代", "明代", "清代",
+        "写景", "写人", "咏物", "春天", "秋天", "赞美", "山水", "写山", "写水", "写雪", "月亮", "写风",
+        "春节", "元宵节", "清明节", "端午", "中秋", "重阳", "七夕", "寒食",
+        "抒情", "婉约", "抒怀", "思念", "送别", "思乡", "离别", "怀人", "相思", "孤独", "励志", "豪放"
       ],
       poety: [],
       type: 1, //分页访问的接口类型 1代表全部古诗接口，其他代表标签接口
@@ -166,6 +158,7 @@ export default {
       displayAll: new Array(5).fill(``),
     };
   },
+  watch: {},
   mounted() {
 
     bus.emit('bus', false);
@@ -190,6 +183,13 @@ export default {
     }
   },
   methods: {
+    clickInput(){
+      document.getElementById('file').click();
+      this.dialogFormVisible = false;
+    },
+    xxx() {
+      this.dialogFormVisible = true;
+    },
     /**
      * 展开更多
      */
@@ -207,17 +207,14 @@ export default {
      * @param e
      */
     update(e) {
+
       let file = e.target.files[0];
       let param = new FormData(); //创建form对象
       param.append('img', file);//通过append向form对象添加数据
-      // console.log(param.get('img')); //FormData私有类对象，访问不到，可以通过get判断值是否传进去
+      param.append('type', this.region);//通过append向form对象添加数据
       let config = {
         //添加请求头
         headers: {"Content-Type": "multipart/form-data"},
-        // //添加上传进度监听事件
-        // onUploadProgress: e => {
-        //   this.progress = ((e.loaded / e.total * 100) | 0) + "%";
-        // }
       };
       const loadingInstance = ElLoading.service({fullscreen: true})
       let url = '/imgUpload/picPoem/';
@@ -269,7 +266,7 @@ export default {
         // console.log(1)
         loadingInstance.close();
       }).catch(error => {
-        this.$message.error(`发生错误，错误原因为${error}`)
+        this.$message.error(`请求发生错误，错误原因为${error}`)
         loadingInstance.close();
       })
 
@@ -440,7 +437,7 @@ export default {
   font-size: 22px;
 }
 
-.tags > .item {
+.tags .item {
   display: inline-block;
   /*font-weight: bold;*/
   padding: 5px 15px;
@@ -597,8 +594,17 @@ export default {
 .play {
   padding: 10px;
   position: absolute;
-  top: 0;
+  top: -25px;
   right: 10px;
+  cursor: pointer;
+}
+
+.play {
+  width: 50px;
+  height: 50px;
+  background-image: url("../assets/images/play_ic.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .more, .reduce {
@@ -611,4 +617,12 @@ export default {
   border-radius: 10px;
 }
 
+.tags-2 {
+  height: 21px;
+  padding: 10px;
+  background-color: rgb(93, 126, 131);
+  margin-right: 20px;
+  color: #ffffff;
+  margin-left: 30px;
+}
 </style>

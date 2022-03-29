@@ -38,11 +38,7 @@ const router = createRouter({
             name: 'gameIndex',
             component: () => import('@/pages/gameIndex'),
         },
-        {
-            path: '/battle',
-            name: 'battle',
-            component: () => import('@/pages/battle'),
-        },
+
         {
             path: '/forPoetry',
             name: 'forPoetry',
@@ -62,6 +58,11 @@ const router = createRouter({
             path: '/aiToPoetry',
             name: 'aiToPoetry',
             component: () => import('@/pages/aiToPoetry'),
+        },
+        {
+            path: '/recommendedDetails',
+            name: 'recommendedDetails',
+            component: () => import('@/pages/recommendedDetails'),
         },
     ]
 })
