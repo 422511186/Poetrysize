@@ -11,13 +11,23 @@
     <!--古诗分类标签-->
     <nav class="tags">
       <div>
-        <span class="tags-2">朝代</span>
+<!--        <span class="tags-2">朝代</span>-->
+        <span
+            class="tags-2"
+            v-for="(item, index) in tags.slice(0,1)"
+            :key="index"
+            @click="getPoets(index)">
+          {{ item }}
+        </span>
+
+
         <span
             class="item"
-            v-for="(item, index) in tags.slice(0,11)"
-            :key="index"
-            :class="index === typeValue ? 'checked' : ''"
-            @click="getPoets(index)"
+            style="margin-left: 10px"
+            v-for="(item, index) in tags.slice(1,11)"
+            :key="index+1"
+            :class="index+1 === typeValue ? 'checked' : ''"
+            @click="getPoets(index+1)"
         >
         {{ item }}
       </span>
@@ -291,8 +301,8 @@ export default {
 .tags .item {
   display: inline-block;
   padding: 10px;
-  margin-right: 12px;
-  border-radius: 5px;
+  margin-right: 0;
+  /*border-radius: 5px;*/
   cursor: pointer;
 }
 
@@ -384,8 +394,10 @@ export default {
   padding: 2em 2em 3em;
   /*background-color: rgba(253, 247, 209, 0.4);*/
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  background-image: url("../assets/images/bgi1.jpg");
-  background-position: left center;
+  /*background-image: url("../assets/images/bgi1.jpg");*/
+  background-image: url("../assets/images/bB9o2WVxmK.jpg");
+  background-size: cover;
+  background-position: top right;
   background-repeat: no-repeat;
 }
 

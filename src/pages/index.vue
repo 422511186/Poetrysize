@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div class="box" >
     <div>
       <div class="tag">
         <span class="Text"><router-link to="/">每日推荐</router-link></span>
@@ -27,7 +27,7 @@
               <h1>--{{ item.poem }}《{{ item.name }}》</h1>
             </div>
             <p>
-              {{ item.content }}
+              <span class="xxx" style="cursor:pointer;" @click="toDetail(item.name,item.poem)">{{ item.content }}</span>
             </p>
           </div>
         </el-carousel-item>
@@ -99,7 +99,7 @@
                 src="../assets/images/717fbc8fd7397febe946d28e876975a.png"
                 alt=""
             />
-            <h2>含诗歌姓名生成</h2>
+            <h2>诗歌起名</h2>
           </router-link>
         </div>
 
@@ -165,6 +165,15 @@ export default {
       if (weather.indexOf(poem.tag) === -1) return poem.content;
       return poem.content.substr(0, poem.content.indexOf("。") + 1);
     },
+
+    toDetail(name, poet) {
+      this.$router.push({
+        name: `recommendedDetails`,
+        params: {
+          data: JSON.stringify({name: name, poet: poet}),
+        }
+      });
+    }
   },
 };
 </script>
@@ -181,8 +190,6 @@ export default {
 }
 
 .tag .Text {
-  /*font-family: "Microsoft YaHei", serif;*/
-  /*font-weight: bold;*/
   font-size: 22px;
   line-height: 50px;
 }
@@ -315,11 +322,15 @@ export default {
   background-size: 100%;
   background-position: center center;
 }
-
+.prev,.next{
+  display: none;
+}
 .prev:hover, .next:hover {
   transform: scale(1.25);
 }
-
+.top-box:hover .prev, .top-box:hover .next{
+  display: block;
+}
 
 .type {
   position: relative;
@@ -450,5 +461,12 @@ export default {
   font-size: 50px;
   letter-spacing: 10px;
   font-weight: 400;
+}
+
+.xxx {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
 }
 </style>

@@ -30,14 +30,22 @@
     <nav class="tags">
 
       <div style="margin-top: 10px;display: flex;flex-wrap: wrap">
-        <span class="tags-2">朝代</span>
-        <div style="flex: 1">
+        <!--        <span class="tags-2"></span>-->
+        <div style="flex: 1;">
+          <span
+              class="tags-2"
+              v-for="(item, index) in tags.slice(0,1)"
+              :key="index"
+              @click="getPoemsBLabel(1, 5, index)">
+          {{ item }}
+        </span>
+
           <span
               class="item"
-              v-for="(item, index) in tags.slice(0,11)"
-              :key="index"
-              :class="index === typeValue ? 'checked' : ''"
-              @click="getPoemsBLabel(1, 5, index)">
+              v-for="(item, index) in tags.slice(1,11)"
+              :key="index+1"
+              :class="index+1 === typeValue ? 'checked' : ''"
+              @click="getPoemsBLabel(1, 5, index+1)">
           {{ item }}
         </span>
         </div>
@@ -89,7 +97,7 @@
     </nav>
     <!--搜索框-->
     <div class="input-btn">
-      <el-input v-model="value" placeholder=""/>
+      <el-input v-model="value" placeholder="" @keydown.enter="search"/>
 
       <label class="upload_img" @click="xxx"></label>
 
@@ -105,12 +113,18 @@
     <!--寻诗结果展示-->
     <div class="poems">
       <div class="drop-shadow" v-for="(item, index) in poety" :key="index">
-        <h4 class="title">{{ item.name }}</h4>
+        <h4 class="title">
+          <span style="cursor:pointer"
+                @click="toDetail(item.name,item.poet)">
+            {{ item.name }}
+          </span>
+        </h4>
         <h4 class="poet">{{ item["poet"] }}</h4>
         <div class="content" v-html="item.content" :class="displayAll[index]" :id="'content'+item.id"></div>
-        <i class="play" @click="audioPlay(item.content)"></i>
         <div class="more" @click="more(index)" v-show="countBr(item.content)&&displayAll[index]===''">展开</div>
         <div class="reduce" @click="reduce(index)" v-show="countBr(item.content)&&displayAll[index]!==''">收起</div>
+        <i class="play" @click="audioPlay(item.content)"></i>
+        <i class="toPoster" @click="toPoster(item.content)"></i>
       </div>
 
       <div class="pagination">
@@ -183,10 +197,16 @@ export default {
     }
   },
   methods: {
-    clickInput(){
+    /**
+     *选择图片
+     */
+    clickInput() {
       document.getElementById('file').click();
       this.dialogFormVisible = false;
     },
+    /**
+     * 选择寻诗类型
+     */
     xxx() {
       this.dialogFormVisible = true;
     },
@@ -206,8 +226,7 @@ export default {
      * 上传图片文件进行寻诗
      * @param e
      */
-    update(e) {
-
+    update: function (e) {
       let file = e.target.files[0];
       let param = new FormData(); //创建form对象
       param.append('img', file);//通过append向form对象添加数据
@@ -223,12 +242,12 @@ export default {
             this.poety = res.data.data;
             this.len = 1;
             loadingInstance.close();
+            e.target.value = "";
           })
           .catch(error => {
             this.$message.error(`发生错误，错误原因为${error}`)
             loadingInstance.close();
           })
-
     },
     /**
      * 切换分页
@@ -372,8 +391,31 @@ export default {
         return true;
       return false;
     },
-  }
-  ,
+
+    /**
+     /**
+     * 跳转到海报生成
+     */
+    toPoster(data) {
+      data = data.replaceAll('<br>', '')
+      data = data.replaceAll('<p>', '')
+      data = data.replaceAll('</p>', '')
+      this.$router.push({
+        name: `poster`,
+        params: {
+          data: data,
+        }
+      });
+    },
+    toDetail(name, poet) {
+      this.$router.push({
+        name: `recommendedDetails`,
+        params: {
+          data: JSON.stringify({name: name, poet: poet}),
+        }
+      });
+    },
+  },
 }
 ;
 </script>
@@ -400,8 +442,6 @@ export default {
 }
 
 .tag .Text {
-  /*font-family: "Microsoft YaHei", serif;*/
-  /*font-weight: bold;*/
   font-size: 22px;
   line-height: 50px;
 }
@@ -439,11 +479,8 @@ export default {
 
 .tags .item {
   display: inline-block;
-  /*font-weight: bold;*/
   padding: 5px 15px;
-  margin-right: 12px;
-  border-radius: 5px;
-  line-height: 30px;
+  margin-right: 7px;
   cursor: pointer;
   word-wrap: break-word;
 }
@@ -528,7 +565,6 @@ export default {
 }
 
 .drop-shadow {
-  /*font-family: "Microsoft YaHei", serif;*/
   font-family: font7, "Microsoft YaHei", serif;
   margin: 120px auto;
   border-radius: 10px;
@@ -542,12 +578,13 @@ export default {
 }
 
 .drop-shadow {
-  /*text-align: left;*/
+  background-image: url("../assets/images/VxEYwjkoXr.jpg");
+  background-size: cover;
+  background-position: top center;
 }
 
 .drop-shadow .title {
   margin-bottom: 10px;
-  /*letter-spacing: 3px;*/
   font-size: 40px;
 }
 
@@ -592,19 +629,34 @@ export default {
 }
 
 .play {
-  padding: 10px;
-  position: absolute;
-  top: -25px;
-  right: 10px;
-  cursor: pointer;
+  width: 100px;
+  height: 80px;
+  top: -30px;
+  left: -60px;
+  /*background-image: url("../assets/images/play_ic.svg");*/
+  background-image: url("../assets/images/playIc.png");
+  background-size: 100%;
+  /*transition: transform .5s;*/
 }
 
-.play {
-  width: 50px;
-  height: 50px;
-  background-image: url("../assets/images/play_ic.svg");
-  background-size: cover;
+/*.play:hover {*/
+/*  transform: scale(1.1);*/
+/*}*/
+
+.play, .toPoster {
+  padding: 10px;
+  position: absolute;
+  cursor: pointer;
+  background-size: 100%;
   background-repeat: no-repeat;
+}
+
+.toPoster {
+  bottom: 0;
+  left: 5px;
+  width: 15px;
+  height: 20px;
+  background-image: url("../assets/images/toposter.svg");
 }
 
 .more, .reduce {
@@ -618,11 +670,13 @@ export default {
 }
 
 .tags-2 {
-  height: 21px;
-  padding: 10px;
+  /*height: 21px;*/
+  padding: 5px 15px;
   background-color: rgb(93, 126, 131);
   margin-right: 20px;
   color: #ffffff;
   margin-left: 30px;
 }
+
+
 </style>

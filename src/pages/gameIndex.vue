@@ -20,7 +20,8 @@
           <div class="title-2" v-show="v_show">{{ const_variable.title_2[1] }}</div>
           <div class="time">
             <!--            {{ const_variable.time % 60 }}:-->
-            {{ Math.floor(const_variable.time / 60) }} :
+            {{ Math.floor(const_variable.time / 60) }}
+            <span style="vertical-align: 8px">:</span>
             {{ const_variable.time % 60 }}
           </div>
         </div>
@@ -51,12 +52,12 @@
           <div class="q-index">
             {{ index + 1 }}/10
           </div>
-                    <h2>{{ questions[index].name }}</h2>
-                    <h4>{{ questions[index].poet }}</h4>
-                    <h1>{{ questions[index].question }}</h1>
+          <h2>{{ questions[index].name }}</h2>
+          <h4>{{ questions[index].poet }}</h4>
+          <h1>{{ questions[index].question }}</h1>
         </div>
       </div>
-      <!--发送栏-->
+      <!--答题栏-->
       <div class="send-box">
         <button class="commit" style="margin-right: 50px" @click="preQuestion">上一题</button>
         <el-input
@@ -64,10 +65,11 @@
             :disabled="isDis[index]"
             v-model="value[index]"
             placeholder="在此输入..."
+            @keydown.enter="commit(index) "
         />
         <button class="commit" style="margin-left: 50px" @click="nextQuestion">下一题</button>
       </div>
-      <button class="commit" style="margin-top: 20px"  @click="commit(index)" :disabled="isDis[index]">提交</button>
+      <button class="commit" style="margin-top: 20px" @click="commit(index)" :disabled="isDis[index]">提交</button>
     </div>
 
     <!--结果界面-->
@@ -350,6 +352,9 @@ export default {
       return setTimeout(this.counter2, 1000); //counter,延时递归调用自己,1000为间隔调用时间,单位毫秒
     },
   },
+  /**
+   * 解绑结束游戏
+   */
   unmounted() {
     this.gameOver();
   },

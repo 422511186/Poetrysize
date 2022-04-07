@@ -41,6 +41,7 @@
       <input class="msg"
              type="text"
              v-model="value"
+             @keydown.enter="commit"
              @blur="()=> this.tip = ''"
              @focus="()=> this.tip = '正在输入中...'">
       <button class="commit" @click="commit">发送</button>
@@ -65,11 +66,11 @@ export default {
         },
         {
           user: 'mine',
-          msg: '阳气初惊蛰，韶光大地周',
+          msg: '篱外谁家不系船，春风吹入钓鱼湾。',
         },
         {
           user: 'ai',
-          msg: '草木萌芽甲，山川草木抽。万物有生意，如何不解愁。'
+          msg: '一枝红无人见，只有梅花伴雪寒。'
         },
       ], //消息列表
       operate: "对诗",//对诗、对联模式选择
@@ -82,6 +83,7 @@ export default {
   },
   methods: {
     commit() {
+
       if (this.value === null || this.value === '') {
         this.$message.warning('禁止输入为空...')
         return;
@@ -235,9 +237,9 @@ export default {
 
 
 .message-box {
-  background-image: url(../assets/images/AVOQ4F}[G@WB1P]6EZ}M@]S.png);
-  background-size: 50%;
-  background-position: center -10px;
+  background-image: url(../assets/posterImg/3.jpg);
+  background-size: 100%;
+  background-position: center center;
   background-repeat: no-repeat;
 }
 

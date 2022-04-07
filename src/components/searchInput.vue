@@ -45,14 +45,14 @@ export default {
   methods: {
     commit() {
       if (this.value === null || this.value === '') {
-        alert(`输入不能为空！`)
+        this.$alert(`输入不能为空！`)
         return;
       } else if (this.select === `poets`) {
         this.searchPoets();
       } else if (this.select === `poems`) {
         this.searchPoems();
       } else {
-        alert(`请选择搜索类型！`)
+        this.$alert(`请选择搜索类型！`)
       }
     },
     //搜索诗人
@@ -78,7 +78,7 @@ export default {
           }
         });
       }).catch(() => {
-        this.$message.error('请求出现错误...')
+        this.$message.error('请求出现错误...');
       });
     },
     //搜索古诗
@@ -103,7 +103,7 @@ export default {
         });
 
       }).catch(() => {
-        this.$message.error('请求出现错误...')
+        this.$message.error('请求出现错误...');
       });
     },
   },

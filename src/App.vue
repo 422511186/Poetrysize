@@ -1,12 +1,9 @@
 <!--suppress CssUnknownTarget -->
 <template>
   <div id="root">
-    <!--    <router-view></router-view>-->
     <div class="index-box">
       <div class="mask"></div>
-
       <header-component></header-component>
-
       <transition name="component-fade" mode="out-in">
         <router-view></router-view>
       </transition>
@@ -22,7 +19,6 @@ import FooterBox from "@/components/footerBox";
 
 export default {
   name: "App",
-  // eslint-disable-next-line vue/no-unused-components
   components: {FooterBox, HeaderComponent},
   mounted() {
 
@@ -64,7 +60,7 @@ a {
   position: absolute;
   height: 100%;
   width: 100%;
-  background-color: rgba(255,255,255,.5);
+  background-color: rgba(255, 255, 255, .5);
 }
 
 

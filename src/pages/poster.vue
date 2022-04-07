@@ -30,7 +30,6 @@
     </div>
 
 
-
     <el-input v-model="value" class="input" placeholder="请输入诗句"></el-input>
     <div class="more">
       <el-select
@@ -79,19 +78,16 @@
     </button>
     <div class="dividing-line"></div>
     <div class="images-cards">
-      <div
-          v-for="(v, i) in 9"
-          :key="i"
-          :class="i === index ? 'selected' : ''"
-          class="card"
-      >
-        <el-image
-            :src="Url + v + '.jpg'"
-            class="img"
-            fit="cover"
-            @click="fi(i)"
-        />
+      <div v-for="(v, i) in Url.length"
+           :key="i"
+           :class="i === index ? 'selected' : ''"
+           class="card">
+        <el-image :src="Url[v-1]"
+                  class="img"
+                  fit="cover"
+                  @click="fi(i)"/>
       </div>
+
     </div>
   </div>
 </template>
@@ -107,7 +103,18 @@ export default {
       fontClass: ["font1", "font2", "font3", "font4"],
       index: 0,
       value: "",
-      Url: "https://raw.githubusercontent.com/422511186/images/main/bgi/",
+      // Url: "https://raw.githubusercontent.com/422511186/images/main/bgi/",
+      Url: [
+        require('../assets/posterImg/1.jpg'),
+        require('../assets/posterImg/2.jpg'),
+        // require('../assets/posterImg/3.jpg'),
+        require('../assets/posterImg/4.jpg'),
+        require('../assets/posterImg/5.jpg'),
+        require('../assets/posterImg/6.jpg'),
+        require('../assets/posterImg/7.jpg'),
+        require('../assets/posterImg/8.jpg'),
+        require('../assets/posterImg/9.jpg'),
+      ],
       result: "",
       loading: false,
       font: {
@@ -161,11 +168,38 @@ export default {
     };
   },
   mounted() {
-
+    /**
+     * 判断路由是否携带参数
+     * @type {string | RouteParamValue[]}
+     */
+    let data = this.$route.params.data;
+    if (data !== undefined) {
+      this.routeFunc(data);
+    }
   },
   methods: {
+    /**
+     * 古诗携带数据跳转
+     */
+    routeFunc(params) {
+      this.value = params;
+      this.load();
+    },
+
+    /**
+     * 生成海报
+     */
     load() {
+      let maxLen = 30;
       let len = this.value.length;
+      if (len > maxLen && this.g.value === 1) {
+        this.$message.info(`受设备影响，暂不支持超过${maxLen}个字的动态海报生成。`)
+        return;
+      }
+
+      /**
+       * 验证诗句的合法性，并尝试将其合法化
+       */
       // eslint-disable-next-line no-unused-vars
       new Promise((resolve, reject) => {
         resolve(this.value.replaceAll(".", "。"));
@@ -177,8 +211,6 @@ export default {
         }
       }).then(() => {
         this.loading = true;
-        console.log(this.index)
-        console.log(this.index + 1)
         this.$axios({
           url: "/api/gif/",
           method: "post",
@@ -197,10 +229,13 @@ export default {
           this.$message.error(`发生错误，错误原因为${error}`)
           this.loading = false;
         })
+
       });
     },
     fi(i) {
       this.index = i;
+      this.result = this.Url[i];
+      // console.log(this.index);
     },
   },
 };
@@ -246,8 +281,7 @@ export default {
 
 .pre-view {
   width: 1000px;
-  /*height: 313px;*/
-  /*background-color: #accfe0;*/
+  height: 550px;
 }
 
 .pre-view {
