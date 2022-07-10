@@ -82,7 +82,7 @@ export default {
         this.args.tips = '禁止输入...';
       } else {
         this.input_show = true;
-        this.args.tips = '请输入...';
+        this.args.tips = '请输入...（不超过四个字）';
       }
     },
 
@@ -405,7 +405,8 @@ export default {
   list-style: none;
   padding: 6px 0;
 }
-.emo-analyze span{
+
+.emo-analyze span {
   color: black;
 }
 </style>
