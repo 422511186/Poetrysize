@@ -496,10 +496,12 @@ export default {
   display: flex;
   justify-content: space-between;
 }
-
+.input-btn >>> .el-input{
+  width: auto;
+}
 .input-btn >>> input {
   height: 50px;
-  width: 800px;
+  width: 770px;
 }
 
 .btn {
@@ -619,7 +621,7 @@ export default {
   background-repeat: no-repeat;
   background-position: center center;
   position: relative;
-  left: -160px;
+  left: -100px;
   cursor: pointer;
 }
 
